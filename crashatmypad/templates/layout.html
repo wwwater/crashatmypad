@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+    <title>Crash at my pad</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}"> 
+</head>
+<body>
+
+<main class="container">
+  <h3>Crash At My PAD... a roof you can rest under!</h3>
+  <p>A website by climbers for climbers, who are willing to share their roof, yard, trees, or
+      driveway with fellow climbers passing through.</p>
+  <a class="btn" href="{{ url_for('page.index', in) }}">I'm in!</a>
+  <p>And {{ people_in }} others :D</p>
+  <p>{{ message }}</p>
+
+</main>
+
+</body>
+</html>
