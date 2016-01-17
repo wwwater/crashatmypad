@@ -15,7 +15,7 @@ redis:
   volumes:
     - ~/.docker-volumes/crashatmypad/redis/data:/var/lib/redis/data
 
-mobydock:
+crashatmypad:
   build: .
   command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "crashatmypad.app:create_app()"
   environment:
