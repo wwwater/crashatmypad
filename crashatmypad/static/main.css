@@ -1,13 +1,53 @@
+body {
+    margin: 0;
+}
+p, div, a {
+    font-family: 'Overlock';
+}
+
+.container {
+  text-align: center;
+  background: linear-gradient(to bottom, #eee 0%, rgba(125, 182, 31, 0.88) 33%, #eee 100%);
+}
+
+.area-header {
+    width: 100vw;
+    height: 67vh;
+}
+
+.site-title {
+    height: 33vh;
+    line-height: 67vh;
+    font-family: 'Cabin Sketch', bold;
+    font-size: 80px;
+}
+.site-subtitle {
+    height: 18vh;
+    line-height: 18vh;
+    font-family: 'Cabin Sketch', normal;
+    font-size: 32px;
+}
+.site-description {
+    font-size: 20px;
+    padding: 64px;
+    white-space: normal;
+}
+.area-rest {
+    display: block;
+    width: 100vw;
+    height: 33vh;
+}
+.rest-content {
+    padding: 32px;
+}
 h1 {
   color: #333;
 }
 
 p {
-  color: #777;
-  font-size: 12px;
+    margin: 0;
+    color: black;
 }
 
-.container {
-  text-align: center;
-}
+
 
