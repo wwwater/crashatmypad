@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -14,7 +15,8 @@ class User(db.Model):
     phone = db.Column(db.Integer)
     locations = db.relationship('Location')
 
-    def __init__(self, email, name, last_name, birthday=None, profession=None, phone=None):
+    def __init__(self, email, name, last_name, birthday=None, profession=None,
+                 phone=None):
         self.email = email
         self.name = name
         self.last_name = last_name
@@ -48,10 +50,10 @@ class Location(db.Model):
     shower = db.Column(db.Boolean)
     bathroom = db.Column(db.Boolean)
 
-
-    def __init__(self, user, country, city, postal_code=None, street=None, house=None,
-                 apartment=False, room=False, corner=False, yard=False, trees=False, driveway=False,
-                 shower=False, bathroom=False):
+    def __init__(self, user, country, city, postal_code=None, street=None,
+                 house=None, apartment=False, room=False, corner=False,
+                 yard=False, trees=False, driveway=False, shower=False,
+                 bathroom=False):
         self.user = user
         self.street = street
         self.house = house
@@ -69,10 +71,6 @@ class Location(db.Model):
         self.bathroom = bathroom
 
     def __repr__(self):
-        return '<Location in {} of {} {}>'.format(self.city, self.user.name, self.user.last_name)
+        return '<Location in {} of {} {}>'.format(self.city, self.user.name,
+                                                  self.user.last_name)
 
-
-
-class Feedback(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    message = db.Column(db.Text())

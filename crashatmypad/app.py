@@ -3,11 +3,10 @@ import logging
 from flask import Blueprint, Flask, render_template, redirect, request, url_for
 from flask_redis import FlaskRedis
 from redis import StrictRedis
-from sqlalchemy.sql.expression import func
 
 from datetime import date
 
-from persistence.models import db, User, Location, Feedback
+from persistence.models import db, User, Location
 
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.INFO)
@@ -44,29 +43,23 @@ def index():
 
     :return: Flask response
     """
-    if request.args.get('in'):
-        random_message = db.session.query(Feedback).order_by(func.random()).limit(1).scalar().message
-        people_in = redis_store.incr('people_in')
-    else:
-        random_message = ''
-        people_in = redis_store.get('people_in')
-        if people_in is None:
-            people_in = 0
+    return render_template('landing_page.html')
 
-    return render_template('landing_page.html', message=random_message, people_in=people_in)
 
 @page.route('/user/<int:user_id>')
 def user_page(user_id):
     """
     Render the user page.
-
+    :parameter user_id: internal user id
     :return: Flask response
     """
 
     user = db.session.query(User).get(user_id)
     today = date.today()
     diff_pure_years = today.year - user.birthday.year
-    age = diff_pure_years if user.birthday.replace(today.year) <= today else diff_pure_years - 1
+    age = diff_pure_years if user.birthday.replace(today.year) <= today else \
+        diff_pure_years - 1
+
     user_data_to_display = {
         'name': user.name,
         'last_name': user.last_name,
@@ -91,7 +84,9 @@ def user_page(user_id):
         }
         locations_to_display.append(location_to_display)
 
-    return render_template('userpage.html', user=user_data_to_display, locations=locations_to_display)
+    return render_template('user_page.html', user=user_data_to_display,
+                           locations=locations_to_display)
+
 
 @page.route('/whatsinanamethatwhichwecallarosebyanyothernamewouldsmellassweet')
 def seed():
@@ -103,18 +98,6 @@ def seed():
     db.drop_all()
     db.create_all()
 
-    messages = [
-        "Have a nice day!",
-        'May the crash pad be with you.',
-        "Take a rest before the roof!"
-    ]
-
-    for message in messages:
-        feedback = Feedback(message=message)
-        db.session.add(feedback)
-        db.session.commit()
-
-
     very_first_user = User(
         email='laura@moreaux.com',
         name='Laura',
@@ -122,11 +105,21 @@ def seed():
         birthday=date(1987, 6, 7),
         profession='Architect'
     )
+
     db.session.add(very_first_user)
     db.session.commit()
 
-    first_user_location = Location(user=very_first_user, country='Germany', city='Hamburg', corner=True, shower=True, bathroom=True)
-    first_user_secondary_location = Location(user=very_first_user, country='Germany', city='Freiburg', apartment=True)
+    first_user_location = Location(user=very_first_user,
+                                   country='Germany',
+                                   city='Hamburg',
+                                   corner=True,
+                                   shower=True,
+                                   bathroom=True)
+
+    first_user_secondary_location = Location(user=very_first_user,
+                                             country='Germany',
+                                             city='Freiburg',
+                                             apartment=True)
     db.session.add(first_user_location)
     db.session.add(first_user_secondary_location)
     db.session.commit()
