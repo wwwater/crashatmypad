@@ -49,4 +49,5 @@ docs/_build/
 tmtags
 
 # App ignores.
-instance/settings.py
+instance/settings.py*
+config/settings.py*
