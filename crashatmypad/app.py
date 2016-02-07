@@ -53,7 +53,7 @@ def index():
         if people_in is None:
             people_in = 0
 
-    return render_template('layout.html', message=random_message, people_in=people_in)
+    return render_template('landing_page.html', message=random_message, people_in=people_in)
 
 @page.route('/user/<int:user_id>')
 def user_page(user_id):
