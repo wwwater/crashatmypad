@@ -50,5 +50,4 @@ tmtags
 
 # App ignores.
 instance/settings.py*
-config/settings.py*
 helper_scripts.sh
