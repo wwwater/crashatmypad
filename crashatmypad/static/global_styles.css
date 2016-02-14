@@ -1,0 +1,8 @@
+body {
+    margin: 0;
+}
+p, div, a, input, button {
+    font-family: 'Overlock';
+    color: black;
+    margin: 0;
+}

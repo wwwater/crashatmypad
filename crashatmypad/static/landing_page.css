@@ -1,12 +1,3 @@
-body {
-    margin: 0;
-}
-p, div, a, input, button {
-    font-family: 'Overlock';
-    color: black;
-    margin: 0;
-}
-
 .container {
     height: 100vh;
     text-align: center;

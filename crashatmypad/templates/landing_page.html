@@ -4,6 +4,7 @@
   <title>Crash at my pad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='landing_page.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='global_styles.css') }}">
   <link href='https://fonts.googleapis.com/css?family=Overlock:400,700|Cabin+Sketch:700' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -20,7 +21,7 @@
       yard, trees, or
       driveway with fellow climbers passing through.</span>
   </div>
-  <form action="" method="get" class="search">
+  <form action="/search" method="get" class="search">
     <input type="text" id="location" title="Location to go"
            placeholder="Frankenjura, Germany" class="search-input" />
     <button type="submit" class="search-button">Find!</button>

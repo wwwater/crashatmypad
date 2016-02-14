@@ -46,6 +46,40 @@ def index():
     return render_template('landing_page.html')
 
 
+@page.route('/search')
+def search():
+    """
+    Render the home page.
+
+    :return: Flask response
+    """
+    return render_template('search.html',
+                           query='Hamburg, Germany',
+                           results=[
+                               {
+                                   'user_name': 'Laura',
+                                   'street': 'Rotherbaumchausse',
+                                   'city': 'Hamburg',
+                                   'latitude': 53.57,
+                                   'longitude': 10.00
+                               },
+                               {
+                                   'user_name': 'Peter',
+                                   'street': 'Alsterallee',
+                                   'city': 'Hamburg',
+                                   'latitude': 53.558,
+                                   'longitude': 10.01
+                               },
+                               {
+                                   'user_name': 'Lena',
+                                   'street': 'Elbstrasse',
+                                   'city': 'Hamburg',
+                                   'latitude': 53.572,
+                                   'longitude': 10.03
+                               }
+                           ])
+
+
 @page.route('/user/<int:user_id>')
 def user_page(user_id):
     """
