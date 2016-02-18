@@ -49,5 +49,5 @@ docs/_build/
 tmtags
 
 # App ignores.
-instance/settings.py*
+config/*
 helper_scripts.sh

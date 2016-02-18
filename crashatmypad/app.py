@@ -25,7 +25,7 @@ def create_app():
     app = Flask(__name__, instance_relative_config=False)
 
     app.config.from_object('config.settings')
-    app.config.from_pyfile('settings.py', silent=False)
+    app.config.from_pyfile('../config/settings.py', silent=False)
 
     db.init_app(app)
     redis_store.init_app(app)
