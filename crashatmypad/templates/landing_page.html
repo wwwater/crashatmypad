@@ -16,16 +16,16 @@
   <div class="subtitle">
     <span class="subtitle-text">... a roof you can rest under!</span>
   </div>
-  <div class="description">
-    <span class="description-text">A website by climbers for climbers, who are willing to share their roof,
-      yard, trees, or
-      driveway with fellow climbers passing through.</span>
-  </div>
+  <div class="search-n-description">
   <form action="/search" method="get" class="search">
     <input type="text" id="location" title="Location to go"
            placeholder="Frankenjura, Germany" class="search-input" />
     <button type="submit" class="search-button">Find!</button>
   </form>
+    <span class="description-text">A website by climbers for climbers, who are willing to share their roof,
+      yard, trees, or
+      driveway with fellow climbers passing through.</span>
+  </div>
 </main>
 <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>

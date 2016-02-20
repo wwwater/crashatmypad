@@ -1,7 +1,9 @@
 .container {
     height: 100vh;
     text-align: center;
-    background: linear-gradient(to bottom, rgba(125, 182, 31, 0.4) 0%, rgba(125, 182, 31, 0.88) 27%, #eee 100%);
+   /*background: linear-gradient(to bottom, rgba(125, 182, 31, 0.4) 0%, rgba(125, 182, 31, 0.88) 27%, #eee 100%);*/
+    background-image: url(IMG_0272.JPG);
+    background-size: cover;
 }
 
 .area-header {
@@ -9,40 +11,51 @@
     height: 67vh;
 }
 
-.title {
+.title, .subtitle, .search-n-description {
     height: 33vh;
     display: flex;
     flex-direction: column;
+}
+.title {
     justify-content: flex-end;
 }
 .title-text {
     font-family: 'Cabin Sketch', bold;
     font-size: 80px;
+    color: black;
+    text-shadow: 3px 3px #ddd;
 }
-
-.subtitle, .description {
-    height: 17vh;
-    display: flex;
-    flex-direction: column;
+.subtitle {
     justify-content: flex-start;
 }
 .subtitle-text {
     font-family: 'Cabin Sketch', normal;
     font-size: 32px;
+    color: black;
+    text-shadow: 2px 2px #ddd;
+}
+.search-n-description {
+    justify-content: flex-start;
 }
 .description-text {
     width: 85%;
     align-self: center;
     font-size: 20px;
+    background-color: rgba(0,0,0,0.0);
+    color: #ddd;
+    border-radius: 3px;
+    text-shadow: 1px 1px #111;
+    padding-bottom: 8px;
 }
 .search {
     display: flex;
     justify-content: center;
     font-size: 20px;
-    margin-top: 32px;
+    margin-bottom: 64px;
 }
 .search-input {
     width: 65%;
+    height: 23px;
     font-size: inherit;
     border: 1px solid black;
     border-radius: 3px;
@@ -51,6 +64,7 @@
     background: #fafafa;
 }
 .search-button {
+    height: 33px;
     font-size: inherit;
     background: rgba(125, 182, 31, 0.88);
     border: 1px solid black;
