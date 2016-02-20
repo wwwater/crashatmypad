@@ -30,7 +30,7 @@
       <div class="pure-u-1 pure-u-md-1-2 search-results-list">
         {% for location in results %}
         <div class="search-result">
-          <div class="search-result-name">{{ location.user_name }}</div>
+          <a class="search-result-name" href="{{ '/user/' + location.user_id }}">{{ location.user_name }}</a>
           <div class="search-result-address">
             on {{ location.street }} in {{ location.city }}
           </div>

@@ -58,6 +58,7 @@ def search():
                            results=[
                                {
                                    'user_name': 'Laura',
+                                   'user_id': str(1),
                                    'street': 'Rotherbaumchausse',
                                    'city': 'Hamburg',
                                    'latitude': 53.57,
@@ -65,6 +66,7 @@ def search():
                                },
                                {
                                    'user_name': 'Peter',
+                                   'user_id': str(1),
                                    'street': 'Alsterallee',
                                    'city': 'Hamburg',
                                    'latitude': 53.558,
@@ -72,6 +74,7 @@ def search():
                                },
                                {
                                    'user_name': 'Lena',
+                                   'user_id': str(1),
                                    'street': 'Elbstrasse',
                                    'city': 'Hamburg',
                                    'latitude': 53.572,

@@ -47,6 +47,9 @@
 .search-results {
     width: 85%;
     align-self: center;
+    background: #ddd;
+    padding: 16px;
+    flex-grow: 1;
 }
 
 .search-results-list {
