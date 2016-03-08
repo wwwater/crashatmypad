@@ -18,16 +18,17 @@
   <title>Crash pads @ {{ query }}</title>
 </head>
 
-<body onload="getMapWithMarkers({{ results }})">
+<body onload="getMapWithMarkers({{ query_coordinates }}, {{ results }})">
   <div class="search-page">
-    <form action="" method="get" class="search">
-      <input type="text" id="location" title="Location to go"
-             placeholder="Munich, Germany" class="search-input"
+    <form action="/search" method="get" class="search">
+      <input type="text" id="location" title="Location to go" name="location"
+             placeholder="Hamburg, Germany" class="search-input"
              value="{{ query }}"/>
       <button type="submit" class="search-button">Find!</button>
     </form>
     <div class="pure-g search-results">
       <div class="pure-u-1 pure-u-md-1-2 search-results-list">
+        <div class="results-count">Found {{ results|length }} crash pads</div>
         {% for location in results %}
         <div class="search-result">
           <a class="search-result-name" href="{{ '/user/' + location.user_id }}">{{ location.user_name }}</a>

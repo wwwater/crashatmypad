@@ -1,31 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
+import math
+from sqlalchemy.ext.hybrid import hybrid_method
 
-db = SQLAlchemy()
-
-
-class User(db.Model):
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
-    name = db.Column(db.String(80))
-    last_name = db.Column(db.String(80))
-    birthday = db.Column(db.Date)
-    profession = db.Column(db.String(120))
-    phone = db.Column(db.Integer)
-    locations = db.relationship('Location')
-
-    def __init__(self, email, name, last_name, birthday=None, profession=None,
-                 phone=None):
-        self.email = email
-        self.name = name
-        self.last_name = last_name
-        self.birthday = birthday
-        self.profession = profession
-        self.phone = phone
-
-    def __repr__(self):
-        return '<User {} {}>'.format(self.name, self.last_name)
+from db import db
 
 
 class Location(db.Model):
@@ -34,6 +10,8 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', backref=db.backref('users', lazy='dynamic'))
+    longitude = db.Column(db.Float)
+    latitude = db.Column(db.Float)
     street = db.Column(db.String(80))
     house = db.Column(db.String(10))
     city = db.Column(db.String(30))
@@ -50,11 +28,13 @@ class Location(db.Model):
     shower = db.Column(db.Boolean)
     bathroom = db.Column(db.Boolean)
 
-    def __init__(self, user, country, city, postal_code=None, street=None,
-                 house=None, apartment=False, room=False, corner=False,
-                 yard=False, trees=False, driveway=False, shower=False,
-                 bathroom=False):
+    def __init__(self, user, longitude, latitude, country, city,
+                 postal_code=None, street=None, house=None,
+                 apartment=False, room=False, corner=False, yard=False,
+                 trees=False, driveway=False, shower=False, bathroom=False):
         self.user = user
+        self.longitude = longitude
+        self.latitude = latitude
         self.street = street
         self.house = house
         self.postal_code = postal_code
@@ -74,3 +54,19 @@ class Location(db.Model):
         return '<Location in {} of {} {}>'.format(self.city, self.user.name,
                                                   self.user.last_name)
 
+    @hybrid_method
+    def distance_to(self, longitude, latitude):
+        r_earth = 6371
+        phi0 = math.radians(self.latitude)
+        phi1 = math.radians(latitude)
+        lambda0 = math.radians(self.longitude)
+        lambda1 = math.radians(longitude)
+        d_phi = phi1 - phi0
+        d_lambda = lambda1 - lambda0
+
+        a = math.sin(d_phi / 2) * math.sin(d_phi / 2) + \
+            math.cos(phi0) * math.cos(phi1) * \
+            math.sin(d_lambda / 2) * math.sin(d_lambda / 2)
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+        return r_earth * c

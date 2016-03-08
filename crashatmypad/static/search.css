@@ -56,6 +56,10 @@
     text-align: left;
 }
 
+.results-count {
+    margin-bottom: 32px;
+}
+
 .search-result {
     margin-bottom: 32px;
     margin-right: 32px;

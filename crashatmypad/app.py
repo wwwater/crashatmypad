@@ -6,7 +6,11 @@ from redis import StrictRedis
 
 from datetime import date
 
-from persistence.models import db, User, Location
+from persistence.db import db
+from persistence.user import User
+from persistence.location import Location
+
+from service.search import find_locations_by_query
 
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.INFO)
@@ -46,41 +50,19 @@ def index():
     return render_template('landing_page.html')
 
 
-@page.route('/search')
+@page.route('/search/')
 def search():
     """
     Render the home page.
 
     :return: Flask response
     """
-    return render_template('search.html',
-                           query='Hamburg, Germany',
-                           results=[
-                               {
-                                   'user_name': 'Laura',
-                                   'user_id': str(1),
-                                   'street': 'Rotherbaumchausse',
-                                   'city': 'Hamburg',
-                                   'latitude': 53.57,
-                                   'longitude': 10.00
-                               },
-                               {
-                                   'user_name': 'Peter',
-                                   'user_id': str(1),
-                                   'street': 'Alsterallee',
-                                   'city': 'Hamburg',
-                                   'latitude': 53.558,
-                                   'longitude': 10.01
-                               },
-                               {
-                                   'user_name': 'Lena',
-                                   'user_id': str(1),
-                                   'street': 'Elbstrasse',
-                                   'city': 'Hamburg',
-                                   'latitude': 53.572,
-                                   'longitude': 10.03
-                               }
-                           ])
+    # print request
+    query = request.args.get('location') or 'Hamburg, Germany'
+    results = find_locations_by_query(query)
+    return render_template('search.html', query=query,
+                           results=results['locations'],
+                           query_coordinates=results['query'])
 
 
 @page.route('/user/<int:user_id>')
@@ -135,7 +117,7 @@ def seed():
     db.drop_all()
     db.create_all()
 
-    very_first_user = User(
+    user1 = User(
         email='laura@moreaux.com',
         name='Laura',
         last_name='Moreaux',
@@ -143,22 +125,78 @@ def seed():
         profession='Architect'
     )
 
-    db.session.add(very_first_user)
+    db.session.add(user1)
     db.session.commit()
 
-    first_user_location = Location(user=very_first_user,
-                                   country='Germany',
-                                   city='Hamburg',
-                                   corner=True,
-                                   shower=True,
-                                   bathroom=True)
+    user1_location1 = Location(user=user1,
+                               longitude=9.9711,
+                               latitude=53.5818,
+                               country='Germany',
+                               city='Hamburg',
+                               street='Eppendorfer Weg',
+                               house=219,
+                               corner=True,
+                               shower=True,
+                               bathroom=True)
 
-    first_user_secondary_location = Location(user=very_first_user,
-                                             country='Germany',
-                                             city='Freiburg',
-                                             apartment=True)
-    db.session.add(first_user_location)
-    db.session.add(first_user_secondary_location)
+    user1_location2 = Location(user=user1,
+                               longitude=11.2438,
+                               latitude=49.4869,
+                               country='Germany',
+                               city='Roetenbach an der Pegnitz',
+                               street="Alter Kirchenweg",
+                               house=35,
+                               apartment=True)
+    db.session.add(user1_location1)
+    db.session.add(user1_location2)
+    db.session.commit()
+
+    user2 = User(
+        email='lena@anderson.com',
+        name='Lena',
+        last_name='Anderson',
+        birthday=date(1983, 6, 17),
+        profession='Carpenter'
+    )
+
+    db.session.add(user2)
+    db.session.commit()
+
+    user2_location1 = Location(user=user2,
+                               longitude=10.0325,
+                               latitude=53.5745,
+                               country='Germany',
+                               city='Hamburg',
+                               street='Heitmannstr.',
+                               corner=True,
+                               shower=True,
+                               bathroom=True)
+
+    db.session.add(user2_location1)
+    db.session.commit()
+
+    user3 = User(
+        email='chris@hasselberg.com',
+        name='Chris',
+        last_name='Hasselberg',
+        birthday=date(1981, 2, 9),
+        profession='Manager'
+    )
+
+    db.session.add(user3)
+    db.session.commit()
+
+    user3_location1 = Location(user=user3,
+                               longitude=10.0131,
+                               latitude=53.4902,
+                               country='Germany',
+                               city='Hamburg',
+                               street='Hanseatenweg',
+                               corner=True,
+                               shower=True,
+                               bathroom=True)
+
+    db.session.add(user3_location1)
     db.session.commit()
 
     return redirect(url_for('page.index'))

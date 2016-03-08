@@ -7,26 +7,18 @@ if (document.fonts) {
     }
 }
 
-function calculateZoomForPoints(points) {
-    return 13;
-}
-
-
-function getDisplayBoundsForPoints(points) {
-    var xMin = 180;
-    var xMax = -180;
-    var yMin = 90;
-    var yMax = -90;
-    for (var i = 0; i < points.length; i++) {
-        xMin = Math.min(xMin, points[i].longitude);
-        xMax = Math.max(xMax, points[i].longitude);
-        yMin = Math.min(yMin, points[i].latitude);
-        yMax = Math.max(yMax, points[i].latitude);
+// find minimal bounding box for locations that surround central point
+function getDisplayBoundsForPoints(center, locations) {
+    dxMax = 0
+    dyMax = 0
+    for (var i = 0; i < locations.length; i++) {
+        dxMax = Math.max(dxMax, Math.abs(center.longitude - locations[i].longitude));
+        dyMax = Math.max(dyMax, Math.abs(center.latitude - locations[i].latitude));
     }
 
     return [
-        [yMin, xMin],
-        [yMax, xMax]
+        [center.latitude - dyMax, center.longitude - dxMax],
+        [center.latitude + dyMax, center.longitude + dxMax]
     ];
 }
 
@@ -37,33 +29,38 @@ function getMaxBoundsFromInitialBounds(initialBounds) {
     ];
 }
 
-function getMapWithMarkers(points) {
-    if (points.length > 0) {
-        var firstMarker = points[0];
-        var zoom = calculateZoomForPoints(points);
-        var map = L.map('map');
+function getMapWithMarkers(query, locations) {
+    var map = L.map('map');
+    L.control.scale({position: 'topright'}).addTo(map);
+    L.marker([query.latitude, query.longitude]).addTo(map);
 
-        for (var i = 0; i < points.length; i++) {
-            var marker = new L.circle([points[i].latitude, points[i].longitude], 200) // in m
-                .addTo(map);
-            var popup = new L.popup()
-                .setLatLng([points[i].latitude, points[i].longitude])
-                .setContent(points[i].user_name).addTo(map);
-        }
-        L.control.scale({position: 'topright'}).addTo(map);
-        map.fitBounds(getDisplayBoundsForPoints(points), {padding: [10, 10]}); // in px
-        var initialBounds = map.getBounds();
-        map.setMaxBounds(getMaxBoundsFromInitialBounds(initialBounds));
-
-        var osmUrl='https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png';
-        var osmAttribution='Maps © <a href="http://www.thunderforest.com" target="_blank">Thunderforest</a>,' +
-            ' Data © <a href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors';
-        var osm = new L.tileLayer(osmUrl, {
-            minZoom: 6,
-            maxZoom: 14,
-            attribution: osmAttribution
-        });
-
-        map.addLayer(osm);
+    for (var i = 0; i < locations.length; i++) {
+        var marker = new L.circle([locations[i].latitude, locations[i].longitude], 200) // in m
+            .addTo(map);
+        var popup = new L.popup()
+            .setLatLng([locations[i].latitude, locations[i].longitude])
+            .setContent(locations[i].user_name).addTo(map);
     }
+
+    map.fitBounds(getDisplayBoundsForPoints(query, locations), {padding: [10, 10]}); // in px
+
+    if (locations.length > 0) {
+        map.setZoom(Math.min(Math.max(map.getZoom(), 6), 14));
+    } else {
+        map.setZoom(10);
+    }
+
+    map.setMaxBounds(getMaxBoundsFromInitialBounds(map.getBounds()));
+
+    var tileUrl='https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png';
+    var attribution='Maps © <a href="http://www.thunderforest.com" target="_blank">Thunderforest</a>,' +
+        ' Data © <a href="http://openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors';
+
+    var osm = new L.tileLayer(tileUrl, {
+        minZoom: 6,
+        maxZoom: 14,
+        attribution: attribution
+    });
+
+    map.addLayer(osm);
 }
