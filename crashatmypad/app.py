@@ -1,6 +1,8 @@
 import logging
+from os import path
+import string
 
-from flask import Blueprint, Flask, render_template, redirect, request, url_for
+from flask import Blueprint, Flask, render_template, redirect, request, url_for, jsonify
 from flask_redis import FlaskRedis
 from redis import StrictRedis
 
@@ -11,6 +13,7 @@ from persistence.user import User
 from persistence.location import Location
 
 from service.search import find_locations_by_query
+from util.trie import Trie
 
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.INFO)
@@ -18,6 +21,8 @@ stream_handler.setLevel(logging.INFO)
 redis_store = FlaskRedis.from_custom_provider(StrictRedis)
 
 page = Blueprint('page', __name__)
+
+cities = Trie()
 
 
 def create_app():
@@ -37,6 +42,18 @@ def create_app():
     app.register_blueprint(page)
     app.logger.addHandler(stream_handler)
 
+    cities_file = path.join(path.dirname(__file__), '../world-cities.csv')
+    with open(cities_file, 'r') as f:
+        for line in f:
+            parts = line.split(',')
+            if len(parts) == 4:
+                city = parts[0]
+                country = parts[1]
+                state = parts[2]
+                cities.add(string.join([city, state, country],  ','))
+    print cities.size
+    print cities.get('Moscow')
+
     return app
 
 
@@ -50,7 +67,29 @@ def index():
     return render_template('landing_page.html')
 
 
-@page.route('/search/')
+@page.route('/city')
+def get_world_cities():
+    """
+    Searches world cities that start with the query argument.
+    :return: List of cities with their state and country
+    """
+
+    query = str(string.replace(request.args.get('q'), ', ', ','))
+    print query
+
+    def world_city_to_display_format(entry):
+        parts = entry.split(',')
+        return {
+            'city': string.capwords(parts[0]),
+            'state': string.capwords(parts[1]),
+            'country': string.capwords(parts[2])
+        }
+
+    results = map(world_city_to_display_format, cities.get(query))
+    return jsonify(cities=results)
+
+
+@page.route('/search')
 def search():
     """
     Render the home page.

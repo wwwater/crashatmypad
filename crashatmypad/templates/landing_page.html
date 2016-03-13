@@ -4,6 +4,7 @@
   <title>Crash at my pad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='landing_page.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search_input.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='global_styles.css') }}">
   <link href='https://fonts.googleapis.com/css?family=Overlock:400,700|Cabin+Sketch:700' rel='stylesheet' type='text/css'>
 </head>
@@ -17,16 +18,22 @@
     <span class="subtitle-text">... a roof you can rest under!</span>
   </div>
   <div class="search-n-description">
-  <form action="/search" method="get" class="search">
-    <input type="text" id="location" title="Location to go" name="location"
-           value="" placeholder="Hamburg, Germany" class="search-input" />
-    <button class="search-button">Find!</button>
-  </form>
+  <div class="search">
+    <select name="location" id="selector-city" class="selector-city"
+        onkeydown="onKeyDownCitySelector(event)"
+        ondblclick="onDoubleClickCitySelector(event)"
+        onclick="onDoubleClickCitySelector(event)"></select>
+    <input type="text" id="input-location" title="Location to go"
+            placeholder="Hamburg, Germany" class="search-input" autofocus
+            oninput="onChangeSearchInput(event)"
+            onkeydown="onKeyDownSearchInput(event)"/>
+  </div>
     <span class="description-text">A website by climbers for climbers, who are willing to share their roof,
       yard, trees, or
       driveway with fellow climbers passing through.</span>
   </div>
 </main>
 <script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='search_input.js') }}"></script>
 </body>
 </html>

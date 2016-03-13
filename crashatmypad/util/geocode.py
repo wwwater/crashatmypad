@@ -22,7 +22,7 @@ def geocode_by_address(country, city, postal_code=None, street=None, house=None)
 
 def geocode_by_query(query):
     url = 'http://nominatim.openstreetmap.org/search.php?format=json&' + \
-          'limit=1&q=' + query
+          'limit=1&' + urllib.urlencode({'q': query})
     request = urllib2.Request(url, None, {'Content-Type': 'application/json'})
     response = urllib2.urlopen(request)
     data = response.read()
