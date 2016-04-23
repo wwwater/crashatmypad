@@ -12,8 +12,8 @@ class User(db.Model):
     phone = db.Column(db.Integer)
     locations = db.relationship('Location')
 
-    def __init__(self, email, name, last_name, birthday=None, profession=None,
-                 phone=None):
+    def __init__(self, email, name=None, last_name=None, birthday=None,
+                 profession=None, phone=None):
         self.email = email
         self.name = name
         self.last_name = last_name

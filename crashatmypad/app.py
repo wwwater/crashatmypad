@@ -2,14 +2,16 @@ import logging
 from os import path
 import string
 
-from flask import Blueprint, Flask, render_template, redirect, request, url_for, jsonify
+from flask import Blueprint, Flask, render_template, redirect, request, url_for, jsonify, abort
 from flask_redis import FlaskRedis
+from flask.ext.assets import Environment, Bundle
 from redis import StrictRedis
 
 from datetime import date
 
 from persistence.db import db
 from persistence.user import User
+from persistence.password import Password
 from persistence.location import Location
 
 from service.search import find_locations_by_query
@@ -32,6 +34,19 @@ def create_app():
     :return: Flask app
     """
     app = Flask(__name__, instance_relative_config=False)
+
+    assets = Environment(app)
+    assets.url = app.static_url_path
+    scss = Bundle(
+        'landing_page.scss',
+        'search_input.scss',
+        'global_styles.scss',
+        'search.scss',
+        'user_page.scss',
+        filters='pyscss',
+        output='all.css'
+    )
+    assets.register('scss_all', scss)
 
     app.config.from_object('config.settings')
     app.config.from_pyfile('../config/settings.py', silent=False)
@@ -104,7 +119,7 @@ def search():
                            query_coordinates=results['query'])
 
 
-@page.route('/user/<int:user_id>')
+@page.route('/user/<int:user_id>', methods=['GET'])
 def user_page(user_id):
     """
     Render the user page.
@@ -144,6 +159,24 @@ def user_page(user_id):
 
     return render_template('user_page.html', user=user_data_to_display,
                            locations=locations_to_display)
+
+
+@page.route('/user', methods=['POST'])
+def new_user():
+    username = request.json.get('username')
+    password = request.json.get('password')
+    if username is None or password is None:
+        abort(400)  # missing arguments
+    if User.query.filter_by(email=username).first() is not None:
+        abort(400)  # existing user
+
+    user = User(email=username)
+    password_entry = Password(username=username, password=password)
+    db.session.add(user)
+    db.session.commit()
+    db.session.add(password_entry)
+    db.session.commit()
+    return jsonify({'username': password_entry.username}), 201
 
 
 @page.route('/whatsinanamethatwhichwecallarosebyanyothernamewouldsmellassweet')

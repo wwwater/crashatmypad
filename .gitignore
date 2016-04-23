@@ -51,3 +51,4 @@ tmtags
 # App ignores.
 config/*
 helper_scripts.sh
+crashatmypad/static/.webassets-cache/

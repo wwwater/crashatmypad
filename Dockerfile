@@ -13,6 +13,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-VOLUME ["static"]
+
 
 CMD gunicorn -b 0.0.0.0:8000 "crashatmypad.app:create_app()"
