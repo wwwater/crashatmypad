@@ -1,2 +1,5 @@
 .git
 .dockerignore
+node_modules/
+crashatmypad/static/dist/
+crashatmypad/static/tmp/

@@ -4,7 +4,6 @@ import string
 
 from flask import Blueprint, Flask, render_template, redirect, request, url_for, jsonify, abort
 from flask_redis import FlaskRedis
-from flask.ext.assets import Environment, Bundle
 from redis import StrictRedis
 
 from datetime import date
@@ -34,19 +33,6 @@ def create_app():
     :return: Flask app
     """
     app = Flask(__name__, instance_relative_config=False)
-
-    assets = Environment(app)
-    assets.url = app.static_url_path
-    scss = Bundle(
-        'landing_page.scss',
-        'search_input.scss',
-        'global_styles.scss',
-        'search.scss',
-        'user_page.scss',
-        filters='pyscss',
-        output='all.css'
-    )
-    assets.register('scss_all', scss)
 
     app.config.from_object('config.settings')
     app.config.from_pyfile('../config/settings.py', silent=False)

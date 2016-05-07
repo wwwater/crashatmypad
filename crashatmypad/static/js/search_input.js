@@ -1,3 +1,6 @@
+var _ = require("lodash");
+console.log(_.map([1, 2, 3], function(n) { return n + " meow"; }));
+
 var searchInput = document.getElementById("input-location");
 if (searchInput) {
     searchInput.setAttribute("autocomplete", "off");
@@ -30,7 +33,7 @@ function sendRequest(type, url) {
     });
 }
 
-function onChangeSearchInput(event) {
+global.onChangeSearchInput = function (event) {
     var query = event.target.value;
     console.log('on search input change', query);
     if (query.length > 0){
@@ -70,7 +73,7 @@ function onChangeSearchInput(event) {
     }
 }
 
-function onKeyDownSearchInput(event) {
+global.onKeyDownSearchInput = function (event) {
     if (event.keyCode === 40) { // arrow down
         var selector = document.getElementById("selector-city");
         if (selector.firstChild) {
@@ -79,9 +82,9 @@ function onKeyDownSearchInput(event) {
         }
     }
 
-}
+};
 
-function onKeyDownCitySelector(event){
+global.onKeyDownCitySelector = function (event){
     if (event.keyCode === 38) { // arrow up
         var selector = document.getElementById("selector-city");
         if (selector.selectedIndex === 0) {
@@ -95,7 +98,7 @@ function onKeyDownCitySelector(event){
     }
 }
 
-function onDoubleClickCitySelector(event) {
+global.onDoubleClickCitySelector = function (event) {
     var selector = document.getElementById("selector-city");
     var query = selector.options[selector.selectedIndex].value;
     console.log("on double click city", query);

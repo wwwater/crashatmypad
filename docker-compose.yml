@@ -23,7 +23,7 @@ crashatmypad:
   links:
     - postgres
     - redis
-  volumes:
-    - .:/crashatmypad
+#  volumes:
+#    - .:/crashatmypad
   ports:
     - '8000:8000'

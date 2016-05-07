@@ -4,9 +4,7 @@
   <title>Crash at my pad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href='https://fonts.googleapis.com/css?family=Overlock:400,700|Cabin+Sketch:700' rel='stylesheet' type='text/css'>
-  {% assets "scss_all" %}
-  <link rel=stylesheet type=text/css href="{{ ASSET_URL }}">
-  {% endassets %}
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='dist/style.min.css') }}">
 </head>
 <body>
 
@@ -33,7 +31,7 @@
       driveway with fellow climbers passing through.</span>
   </div>
 </main>
-<script type="text/javascript" src="{{ url_for('static', filename='scripts.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='search_input.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dist/scripts.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dist/search_input.js') }}"></script>
 </body>
 </html>

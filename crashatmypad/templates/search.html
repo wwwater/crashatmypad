@@ -4,9 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css"/>
-  {% assets "scss_all" %}
-  <link rel=stylesheet type=text/css href="{{ ASSET_URL }}">
-  {% endassets %}
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='dist/style.min.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
   <!--[if lte IE 8]>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
@@ -47,8 +45,8 @@
     </div>
   </div>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='map.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='search_input.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='dist/map.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='dist/search_input.js') }}"></script>
 </body>
 
 </html>

@@ -52,3 +52,6 @@ tmtags
 config/*
 helper_scripts.sh
 crashatmypad/static/.webassets-cache/
+crashatmypad/static/dist/
+crashatmypad/static/tmp/
+node_modules/*

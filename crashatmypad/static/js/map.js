@@ -20,7 +20,7 @@ function getMaxBoundsFromInitialBounds(initialBounds) {
     ];
 }
 
-function getMapWithMarkers(query, locations) {
+global.getMapWithMarkers = function (query, locations) {
     var map = L.map('map');
     L.control.scale({position: 'topright'}).addTo(map);
     L.marker([query.latitude, query.longitude]).addTo(map);
@@ -54,4 +54,4 @@ function getMapWithMarkers(query, locations) {
     });
 
     map.addLayer(osm);
-}
+};
