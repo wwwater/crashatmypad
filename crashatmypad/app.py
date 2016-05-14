@@ -3,8 +3,6 @@ from os import path
 import string
 
 from flask import Blueprint, Flask, render_template, redirect, request, url_for, jsonify, abort
-from flask_redis import FlaskRedis
-from redis import StrictRedis
 
 from datetime import date
 
@@ -19,7 +17,6 @@ from util.trie import Trie
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.INFO)
 
-redis_store = FlaskRedis.from_custom_provider(StrictRedis)
 
 page = Blueprint('page', __name__)
 
@@ -38,7 +35,6 @@ def create_app():
     app.config.from_pyfile('../config/settings.py', silent=False)
 
     db.init_app(app)
-    redis_store.init_app(app)
 
     app.register_blueprint(page)
     app.logger.addHandler(stream_handler)

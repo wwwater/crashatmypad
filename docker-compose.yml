@@ -8,13 +8,6 @@ postgres:
   volumes:
     - ~/.docker-volumes/crashatmypad/postgresql/data:/var/lib/postgresql/data
 
-redis:
-  image: redis:2.8.22
-  ports:
-    - '6379:6379'
-  volumes:
-    - ~/.docker-volumes/crashatmypad/redis/data:/var/lib/redis/data
-
 crashatmypad:
   build: .
   command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "crashatmypad.app:create_app()"
@@ -22,7 +15,6 @@ crashatmypad:
     PYTHONUNBUFFERED: true
   links:
     - postgres
-    - redis
 #  volumes:
 #    - .:/crashatmypad
   ports:

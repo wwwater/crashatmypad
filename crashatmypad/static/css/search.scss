@@ -56,10 +56,9 @@
 @media (max-width: 768px) {
     .search-results, .search-input {
         width: 95% !important;
-
-        .selector-city {
-            width: calc(95% + 8px) !important;
-        }
+    }
+    .selector-city {
+        width: calc(95% + 8px) !important;
     }
 }
 
