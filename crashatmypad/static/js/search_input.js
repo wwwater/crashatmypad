@@ -1,5 +1,5 @@
 var _ = require("lodash");
-console.log(_.map([1, 2, 3], function(n) { return n + " meow"; }));
+console.log(_.map([1, 2, 3, 4], function(n) { return n + " meow"; }));
 
 var searchInput = document.getElementById("input-location");
 if (searchInput) {
