@@ -94,7 +94,7 @@ global.onKeyDownCitySelector = function (event){
     } else if (event.keyCode === 13) { //enter
         var selector = document.getElementById("selector-city");
         var query = selector.options[selector.selectedIndex].value;
-        window.location.href = "search?location=" + query;
+        window.location.href = "location?q=" + query;
     }
 }
 
@@ -102,5 +102,5 @@ global.onDoubleClickCitySelector = function (event) {
     var selector = document.getElementById("selector-city");
     var query = selector.options[selector.selectedIndex].value;
     console.log("on double click city", query);
-    window.location.href = "search?location=" + query;
+    window.location.href = "location?q=" + query;
 }

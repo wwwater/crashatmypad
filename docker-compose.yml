@@ -10,12 +10,12 @@ postgres:
 
 crashatmypad:
   build: .
-  command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "crashatmypad.app:create_app()"
+  command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "crashatmypad.app:app"
   environment:
     PYTHONUNBUFFERED: true
   links:
     - postgres
-#  volumes:
-#    - .:/crashatmypad
+  volumes:
+    - .:/crashatmypad
   ports:
     - '8000:8000'

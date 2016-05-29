@@ -32,7 +32,7 @@
         <div class="results-count">Found {{ results|length }} crash pads</div>
         {% for location in results %}
         <div class="search-result">
-          <a class="search-result-name" href="{{ '/user/' + location.user_id }}">{{ location.user_name }}</a>
+          <a class="search-result-name" href="{{ '/user?user_id=' + location.user_id }}">{{ location.user_name }}</a>
           <div class="search-result-address">
             on {{ location.street }} in {{ location.city }}
           </div>
