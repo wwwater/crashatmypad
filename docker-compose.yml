@@ -1,21 +1,23 @@
-postgres:
-  image: postgres:9.4.5
-  environment:
-    POSTGRES_USER: crashatmypad
-    POSTGRES_PASSWORD: padmypad
-  ports:
-    - '5432:5432'
-  volumes:
-    - ~/.docker-volumes/crashatmypad/postgresql/data:/var/lib/postgresql/data
+version: '2'
+services:
+  postgres:
+    image: postgres:9.4.5
+    environment:
+      POSTGRES_USER: crashatmypad
+      POSTGRES_PASSWORD: padmypad
+    ports:
+      - '5432:5432'
+    volumes:
+      - ~/.docker-volumes/crashatmypad/postgresql/data:/var/lib/postgresql/data
 
-crashatmypad:
-  build: .
-  command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "crashatmypad.app:app"
-  environment:
-    PYTHONUNBUFFERED: true
-  links:
-    - postgres
-  volumes:
-    - .:/crashatmypad
-  ports:
-    - '8000:8000'
+  crashatmypad:
+    build: .
+    command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "crashatmypad.app:app"
+    environment:
+      PYTHONUNBUFFERED: true
+    links:
+      - postgres
+    volumes:
+      - .:/crashatmypad
+    ports:
+      - '8000:8000'
