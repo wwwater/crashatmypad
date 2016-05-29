@@ -19,9 +19,9 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-#RUN ln -s /usr/bin/nodejs /usr/bin/node
-#RUN npm install
-#RUN npm install -g gulp
-#RUN gulp build
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN npm install
+RUN npm install -g gulp
+RUN gulp build
 
 CMD gunicorn -b 0.0.0.0:8000 "crashatmypad.app:app"
