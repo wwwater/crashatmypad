@@ -14,8 +14,16 @@ var browserSync = require('browser-sync').create();
 var exec        = require('child_process').exec;
 var clean       = require('gulp-clean');
 var runSequence = require('run-sequence');
+var eslint      = require('gulp-eslint');
 
-gulp.task('browserify', function(done) {
+gulp.task('eslint', function() {
+    return gulp.src(['./crashatmypad/static/js/*.js'])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});
+
+gulp.task('browserify', ['eslint'], function(done) {
     return glob('./crashatmypad/static/js/*.js', function(err, files) {
         if(err) done(err);
 

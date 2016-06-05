@@ -1,0 +1,59 @@
+env:
+  node: true
+  browser: true
+  es6: true
+
+globals:
+  L: true
+
+rules:
+  brace-style: [2, "1tbs", { "allowSingleLine": true }]
+  camelcase: 1
+  comma-dangle: [1, "never"]
+  comma-style: [1, "last"]
+  curly: [2, "all"]
+  default-case: 2
+  dot-notation: 1
+  eol-last: 1
+  eqeqeq: [2, "allow-null"]
+  func-style: [2, "declaration"]
+  guard-for-in: 2
+  indent: [2, 4]
+  key-spacing: [1, {beforeColon: false, afterColon: true, mode: "minimum"}]
+  keyword-spacing: [2, {after: true}]
+  max-len: [2, 80, 4, {"ignoreComments": true}]
+  new-cap: 2
+  no-alert: 2
+  no-caller: 1
+  no-debugger: 2
+  no-empty: 2
+  no-extra-semi: 2
+  no-floating-decimal: 2
+  no-invalid-regexp: 2
+  no-mixed-spaces-and-tabs: 1
+  no-multi-str: 1
+  no-nested-ternary: 2
+  no-new: 2
+  no-obj-calls: 2
+  no-shadow: 1
+  no-trailing-spaces: 1
+  no-undef: 2
+  no-undefined: 2
+  no-unreachable: 2
+  no-unused-vars: [1, {vars: "local", args: "after-used"}]
+  no-use-before-define: 2
+  no-with: 2
+  operator-linebreak: [1, "after", {overrides: {"?": "after", ":": "after"}}]
+  quotes: [1, "single", "avoid-escape"]
+  radix: 2
+  semi: 2
+  semi-spacing: 1
+  space-before-blocks: 1
+  space-before-function-paren: [2, { "anonymous": "always", "named": "never" }]
+  spaced-comment: [2, "always", { exceptions: ["-"]}]
+  space-infix-ops: 2
+  space-in-parens: [1, "never"]
+  space-unary-ops: 1
+  strict: [2, "global"]
+  valid-jsdoc: [1, { requireReturn: false, prefer: { return: "returns" }}]
+  wrap-iife: 2
