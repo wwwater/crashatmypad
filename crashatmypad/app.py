@@ -26,7 +26,7 @@ app.config.from_pyfile('../config/settings.py', silent=False)
 login_manager.init_app(app)
 
 db.init_app(app)
-
+db.create_all(app=app)  # creates new tables but does not overwrite existing
 
 api = Api(app)
 api.add_resource(MainResource, '/')
