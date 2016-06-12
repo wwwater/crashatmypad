@@ -7,3 +7,4 @@ psycopg2==2.6.1
 flask-redis==0.1.0
 
 passlib==1.6.5
+flask-login==0.3.2

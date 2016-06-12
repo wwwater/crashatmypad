@@ -1,16 +1,19 @@
 from datetime import date
 
-from flask import render_template, make_response, jsonify, abort
+from flask import render_template, make_response, redirect
 from flask_restful import Resource, reqparse
+from flask.ext.login import LoginManager, login_user, logout_user, login_required
 
 from crashatmypad.persistence.db import db
 from crashatmypad.persistence.user import User
 from crashatmypad.persistence.password import Password
 
+login_manager = LoginManager()
+
 
 class UsersResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.request_parser = reqparse.RequestParser()
         super(UsersResource, self).__init__()
 
     def get(self):
@@ -18,12 +21,12 @@ class UsersResource(Resource):
         Render the user page.
         :return: Flask response
         """
-        self.reqparse.add_argument('user_id',
-                                   type=str,
-                                   required=True,
-                                   help=
+        self.request_parser.add_argument('user_id',
+                                         type=str,
+                                         required=True,
+                                         help=
                                    'No user id is provided')
-        args = self.reqparse.parse_args()
+        args = self.request_parser.parse_args()
         user_id = args['user_id']
         user = db.session.query(User).get(user_id)
         today = date.today()
@@ -65,23 +68,33 @@ class UsersResource(Resource):
         )
 
     def post(self):
-        self.reqparse.add_argument('username',
-                                   type=str,
-                                   required=True,
-                                   help=
-                                   'No username is provided')
-        self.reqparse.add_argument('password',
-                                   type=str,
-                                   required=True,
-                                   help=
-                                   'No password is provided')
-        args = self.reqparse.parse_args()
+        self.request_parser.add_argument('username',
+                                         type=str,
+                                         required=True,
+                                         help='No username is provided')
+        self.request_parser.add_argument('password',
+                                         type=str,
+                                         required=True,
+                                         help='No password is provided')
+        args = self.request_parser.parse_args()
         username = args['username']
         password = args['password']
-        if username is None or password is None:
-            abort(400)  # missing arguments
-        if User.query.filter_by(email=username).first() is not None:
-            abort(400)  # existing user
+        print username
+        print password
+        if not username or not password:
+            return make_response('Username and password are mandatory! ;)', 400)
+        user = User.query.filter_by(email=username).first()
+        if user is not None:
+            print 'The user already exists. Logging in...'
+            existing_password_entry = Password.query\
+                .filter_by(username=username).first()
+            if existing_password_entry.verify_password(password):
+                login_user(user)
+                return redirect('/')
+            else:
+                print 'Wrong password!'
+                return make_response('User with this email already exists and '
+                                     'it has different password', 400)
 
         user = User(email=username)
         password_entry = Password(username=username, password=password)
@@ -89,5 +102,22 @@ class UsersResource(Resource):
         db.session.commit()
         db.session.add(password_entry)
         db.session.commit()
-        return jsonify({'username': password_entry.username}), 201
+        login_user(user)
+        print 'New user created and logged in!'
+        return redirect('/')
 
+
+class LogoutResource(Resource):
+    def __init__(self):
+        super(LogoutResource, self).__init__()
+
+    @login_required
+    def get(self):
+        print 'Logging out...'
+        logout_user()
+        return redirect('/')
+
+
+@login_manager.user_loader
+def load_user(username):
+    return User.query.filter_by(email=username).first()

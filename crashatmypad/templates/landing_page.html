@@ -9,6 +9,36 @@
 <body>
 
 <main class="container" id="main-page">
+  <div class="header">
+    {% if current_user.is_authenticated %}
+      <div class="greeting">
+      Hi {{ current_user.name or current_user.email }}!
+      </div>
+      <a href="/logout" class="button-login">
+        Log out
+      </a>
+    {% else %}
+      <a href="#to-login" class="button-login">
+        Log in / Sign up
+      </a>
+      <div id="to-login" class="login-dialog">
+        <div class="dialog">
+          <a href="#" title="Close" class="close">X</a>
+          <form action="/user" method="post">
+            <div class="email">
+              <label for="email">Email</label>
+              <input id="email" name="username" type="text" />
+            </div>
+            <div class="password">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="text" />
+            </div>
+            <input type="submit" class="submit" value="Log in / Sign up" />
+          </form>
+        </div>
+      </div>
+    {% endif %}
+  </div>
   <div class="title">
     <span class="title-text">Crash At My Pad</span>
   </div>

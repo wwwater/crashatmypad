@@ -54,7 +54,7 @@ gulp.task( 'clean:tmp', ['uglify'], function() {
 gulp.task('js', ['clean:tmp']);
 
 gulp.task('scss', function() {
-    return gulp.src(['./crashatmypad/static/css/*.scss'])
+    return gulp.src(['./crashatmypad/static/scss/*.scss'])
         .pipe(scss({"bundleExec": true}))
         .pipe(cleanCSS())
         .pipe(concat('style.min.css'))
@@ -80,10 +80,7 @@ gulp.task('build', function() {
 gulp.task('scss-watch', ['scss'], function () { browserSync.reload(); });
 gulp.task('js-watch', ['js'], function () { browserSync.reload(); });
 
-gulp.task('serve', function() {
-
-    exec('gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "crashatmypad.app:create_app()"');
-
+gulp.task('watch', function() {
     browserSync.init({
         proxy: "127.0.0.1:8000"
     });
@@ -94,10 +91,12 @@ gulp.task('serve', function() {
 });
 
 
-gulp.task('default', function() {
+gulp.task('serve', function() {
     runSequence(
         'clean:dist',
         ['js', 'scss'],
-        'serve'
+        'watch'
     );
 });
+
+gulp.task('default', ['serve']);
