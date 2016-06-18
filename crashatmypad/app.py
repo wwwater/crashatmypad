@@ -3,15 +3,12 @@ import logging
 from flask import Flask
 from flask_restful import Api
 
-
 from persistence.db import db
 
 from resources.main import MainResource
 from resources.cities import CitiesResource
 from resources.locations import LocationsResource
-from resources.users import UsersResource
-from resources.users import LogoutResource
-from resources.users import login_manager
+from resources.users import UsersResource, LogoutResource, login_manager, mail
 
 stream_handler = logging.StreamHandler()
 stream_handler.setLevel(logging.INFO)
@@ -24,6 +21,7 @@ app.config.from_object('config.settings')
 app.config.from_pyfile('../config/settings.py', silent=False)
 
 login_manager.init_app(app)
+mail.init_app(app)
 
 db.init_app(app)
 db.create_all(app=app)  # creates new tables but does not overwrite existing
@@ -32,5 +30,5 @@ api = Api(app)
 api.add_resource(MainResource, '/')
 api.add_resource(CitiesResource, '/city')
 api.add_resource(LocationsResource, '/location')
-api.add_resource(UsersResource, '/user')
+api.add_resource(UsersResource, '/user/<user_id>')
 api.add_resource(LogoutResource, '/logout')

@@ -1,16 +1,26 @@
 from flask import render_template, make_response
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 
 
 class MainResource(Resource):
+    def __init__(self):
+        self.request_parser = reqparse.RequestParser()
+        super(MainResource, self).__init__()
+
     def get(self):
         """
         Render the home page.
         :return: Flask response
         """
+        self.request_parser.add_argument('c',
+                                 type=bool,
+                                 required=False)
+        args = self.request_parser.parse_args()
+        confirmation_email_sent = args['c']
         headers = {'Content-Type': 'text/html'}
         return make_response(
-            render_template('landing_page.html'),
+            render_template('landing_page.html',
+                            confirmation_email_sent=confirmation_email_sent),
             200,
             headers
         )

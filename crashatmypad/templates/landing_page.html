@@ -18,20 +18,25 @@
         Log out
       </a>
     {% else %}
+      {% if confirmation_email_sent %}
+        <div class="greeting">
+          A confirmation link is sent to your email : )
+        </div>
+      {% endif %}
       <a href="#to-login" class="button-login">
         Log in / Sign up
       </a>
       <div id="to-login" class="login-dialog">
         <div class="dialog">
           <a href="#" title="Close" class="close">X</a>
-          <form action="/user" method="post">
+          <form action="/user/0" method="post">
             <div class="email">
               <label for="email">Email</label>
-              <input id="email" name="username" type="text" />
+              <input id="email" name="username" type="email"/>
             </div>
             <div class="password">
               <label for="password">Password</label>
-              <input id="password" name="password" type="text" />
+              <input id="password" name="password" type="password" maxlength="32" />
             </div>
             <input type="submit" class="submit" value="Log in / Sign up" />
           </form>

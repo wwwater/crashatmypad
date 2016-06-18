@@ -1,3 +1,5 @@
+import uuid
+
 from db import db
 
 
@@ -12,6 +14,8 @@ class User(db.Model):
     profession = db.Column(db.String(120))
     phone = db.Column(db.Integer)
     locations = db.relationship('Location')
+    email_is_confirmed = db.Column(db.Boolean)
+    confirmation_hash = db.Column(db.String(36))
 
     def __init__(self, email, name=None, last_name=None, birthday=None,
                  profession=None, phone=None):
@@ -21,15 +25,18 @@ class User(db.Model):
         self.birthday = birthday
         self.profession = profession
         self.phone = phone
+        self.email_is_confirmed = False
+        self.confirmation_hash = uuid.uuid4()
 
     def __repr__(self):
-        return '<User {} {}>'.format(self.name, self.last_name)
+        return '<User {} {} with email {}>'.format(self.name, self.last_name,
+                                                   self.email)
 
     def is_authenticated(self):
         return True
 
     def is_active(self):
-        return True
+        return self.email_is_confirmed
 
     def is_anonymous(self):
         return False
