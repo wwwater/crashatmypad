@@ -4,13 +4,14 @@ from os import path
 from flask import jsonify
 from flask_restful import Resource, reqparse
 
+from crashatmypad import app
 from crashatmypad.util.trie import Trie
+
 
 cities = Trie()
 
 
 def _build_cities_trie():
-    print "Meow"
     cities_file = path.join(path.dirname(__file__), '../../world-cities.csv')
     with open(cities_file, 'r') as f:
         for line in f:
@@ -20,9 +21,8 @@ def _build_cities_trie():
                 country = parts[1]
                 state = parts[2]
                 cities.add(string.join([city, state, country], ','))
-
-    print cities.size
-    print cities.get("Moscow")
+    app.logger.info('Loaded cities into the trie in memory, size: %d',
+                    cities.size)
 
 
 _build_cities_trie()
@@ -44,7 +44,7 @@ class CitiesResource(Resource):
         args = self.reqparse.parse_args()
 
         query = str(string.replace(args['q'], ', ', ','))
-        print query
+        app.logger.info('Search a world city with query %s', query)
 
         def world_city_to_display_format(entry):
             parts = entry.split(',')

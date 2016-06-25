@@ -54,3 +54,4 @@ helper_scripts.sh
 crashatmypad/static/.webassets-cache/
 crashatmypad/static/tmp/
 node_modules/*
+app_logging.log*

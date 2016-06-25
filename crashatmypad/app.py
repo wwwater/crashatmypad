@@ -1,6 +1,3 @@
-import logging
-
-from flask import Flask
 from flask_restful import Api
 
 from persistence.db import db
@@ -10,15 +7,8 @@ from resources.cities import CitiesResource
 from resources.locations import LocationsResource
 from resources.users import UsersResource, LogoutResource, login_manager, mail
 
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.INFO)
+from crashatmypad import app
 
-
-app = Flask(__name__, instance_relative_config=False)
-
-app.logger.addHandler(stream_handler)
-app.config.from_object('config.settings')
-app.config.from_pyfile('../config/settings.py', silent=False)
 
 login_manager.init_app(app)
 mail.init_app(app)
@@ -32,3 +22,6 @@ api.add_resource(CitiesResource, '/city')
 api.add_resource(LocationsResource, '/location')
 api.add_resource(UsersResource, '/user/<user_id>')
 api.add_resource(LogoutResource, '/logout')
+
+
+app.logger.info('App has started!')

@@ -1,6 +1,8 @@
 from flask import render_template, make_response
 from flask_restful import Resource, reqparse
 
+from crashatmypad import app
+
 
 class MainResource(Resource):
     def __init__(self):
@@ -13,10 +15,12 @@ class MainResource(Resource):
         :return: Flask response
         """
         self.request_parser.add_argument('c',
-                                 type=bool,
-                                 required=False)
+                                         type=bool,
+                                         required=False)
         args = self.request_parser.parse_args()
-        confirmation_email_sent = args['c']
+        confirmation_email_sent = args['c'] or False
+        app.logger.info('The main page was requested. Confirmation-email-sent '
+                        'message: %s', confirmation_email_sent)
         headers = {'Content-Type': 'text/html'}
         return make_response(
             render_template('landing_page.html',

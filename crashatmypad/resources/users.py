@@ -2,13 +2,15 @@ from datetime import date
 
 from flask import render_template, make_response, redirect, url_for
 from flask_restful import Resource, reqparse
-from flask.ext.login import LoginManager, login_user, logout_user, login_required
+from flask.ext.login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_mail import Mail
 
 
 from crashatmypad.persistence.db import db
 from crashatmypad.persistence.user import User
 from crashatmypad.persistence.password import Password
+
+from crashatmypad import app
 
 from crashatmypad.services.users import send_confirmation_email, confirm_email
 
@@ -35,11 +37,15 @@ class UsersResource(Resource):
         confirm_hash = args['confirm']
         if confirm_hash:
             if confirm_email(user, confirm_hash):
-                print 'Email is confirmed!'
+                app.logger.info('User %s confirmed their email %s', user.id,
+                                user.email)
                 login_user(user)
                 return redirect('/')
             else:
-                print 'Email is not confirmed!'
+                app.logger.warn('User with email %s tried to confirm their '
+                                'email with wrong hash (expected %s - got %s)',
+                                user.email, user.confirmation_hash,
+                                confirm_hash)
                 return make_response('The confirmation email link is wrong! '
                                      'The email cannot be confirmed.', 400)
         if user.birthday:
@@ -99,21 +105,28 @@ class UsersResource(Resource):
             return make_response('Username and password are mandatory! ;)', 400)
         user = User.query.filter_by(email=username).first()
         if user is not None:
-            print 'The user already exists. Checking if the email is confirmed.'
+            app.logger.info('Logging in with an existing username: %s',
+                            user.email)
             existing_password_entry = Password.query\
                 .filter_by(username=username).first()
             if existing_password_entry.verify_password(password):
+                app.logger.info('User %s used the correct password', user.email)
                 if user.email_is_confirmed:
                     login_user(user)
+                    app.logger.info('User %s logged in', user.email)
                     return redirect('/')
                 else:
+                    app.logger.warn('User %s has not verified their email yet.'
+                                    ' Login attempt denied.',
+                                    user.email)
                     return make_response(
                         'Please confirm the email first.'
                         'The confirmation link is sent to your email.', 403)
             else:
-                print 'Wrong password!'
+                app.logger.warn('User %s tried to login with a wrong password',
+                                user.email)
                 return make_response('User with this email already exists and '
-                                     'it has different password', 400)
+                                     'it has different password', 403)
 
         user = User(email=username)
         password_entry = Password(username=username, password=password)
@@ -122,7 +135,8 @@ class UsersResource(Resource):
         db.session.add(password_entry)
         db.session.commit()
         send_confirmation_email(user)
-        print 'New user created!'
+        app.logger.info('New user %d with email %s has been created!', user.id,
+                        user.email)
         return redirect(url_for('mainresource', c=True))
 
 
@@ -132,7 +146,7 @@ class LogoutResource(Resource):
 
     @login_required
     def get(self):
-        print 'Logging out...'
+        app.logger.info('User %s logging out.', current_user.email)
         logout_user()
         return redirect('/')
 
