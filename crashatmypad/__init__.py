@@ -15,7 +15,7 @@ def create_app(environment):
     elif environment is 'TESTING':
         app.config.from_object(settings.TestingConfig)
     elif environment is 'PRODUCTION':
-        app.config.from_object(settings.TestingConfig)
+        app.config.from_object(settings.ProductionConfig)
     else:
         raise EnvironmentError('No environment specified!')
 
