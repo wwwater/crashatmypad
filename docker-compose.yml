@@ -10,7 +10,7 @@ postgres:
 
 crashatmypad:
   build: .
-  command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "crashatmypad.app:app"
+  command: gunicorn -b 0.0.0.0:8000 --reload --access-logfile - "crashatmypad:create_app('DEVELOPMENT')"
   environment:
     PYTHONUNBUFFERED: true
   links:

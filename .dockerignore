@@ -2,3 +2,4 @@
 .dockerignore
 node_modules/
 crashatmypad/static/tmp/
+tmp/

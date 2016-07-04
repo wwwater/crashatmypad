@@ -24,4 +24,4 @@ COPY . .
 #RUN npm install -g gulp
 #RUN gulp build
 
-CMD gunicorn -b 0.0.0.0:8000 "crashatmypad.app:app"
+CMD gunicorn -b 0.0.0.0:8000 "crashatmypad:create_app('PRODUCTION')"
