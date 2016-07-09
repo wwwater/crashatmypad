@@ -10,7 +10,7 @@ node_modules/
 bin/
 build/manifest.json
 develop-eggs/
-dist/
+#dist/
 eggs/
 parts/
 sdist/
