@@ -1,6 +1,6 @@
+from crashatmypad import db
 from crashatmypad.util.geocode import geocode_by_query
 from crashatmypad.util.coordinates import bounding_box_for_distance
-from crashatmypad.persistence.db import db
 from crashatmypad.persistence.location import Location
 
 

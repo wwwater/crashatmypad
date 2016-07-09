@@ -3,6 +3,8 @@
 <head>
   <title>Crash at my pad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
   <link href='https://fonts.googleapis.com/css?family=Overlock:400,700|Cabin+Sketch:700' rel='stylesheet' type='text/css'>
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='dist/style.min.css') }}">
 </head>
@@ -14,9 +16,9 @@
       <div class="greeting">
       Hi {{ current_user.name or current_user.email }}!
       </div>
-      <a href="/logout" class="button-login">
+      <button class="button-login" onclick="onLogout()">
         Log out
-      </a>
+      </button>
     {% else %}
       {% if confirmation_email_sent %}
         <div class="greeting">
@@ -29,7 +31,7 @@
       <div id="to-login" class="login-dialog">
         <div class="dialog">
           <a href="#" title="Close" class="close">X</a>
-          <form action="/user/0" method="post">
+          <form action="/session" method="post">
             <div class="email">
               <label for="email">Email</label>
               <input id="email" name="username" type="email"/>
@@ -38,7 +40,7 @@
               <label for="password">Password</label>
               <input id="password" name="password" type="password" maxlength="32" />
             </div>
-            <input type="submit" class="submit" value="Log in / Sign up" />
+            <input type="submit" class="submit" value="Log in" />
           </form>
         </div>
       </div>
@@ -66,7 +68,7 @@
       driveway with fellow climbers passing through.</span>
   </div>
 </main>
-<script type="text/javascript" src="{{ url_for('static', filename='dist/scripts.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dist/main_page.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='dist/search_input.js') }}"></script>
 </body>
 </html>

@@ -3,7 +3,6 @@ import unittest
 from crashatmypad.util.trie import Trie
 
 
-
 class TrieTest(unittest.TestCase):
     def test_trie(self):
         trie = Trie()

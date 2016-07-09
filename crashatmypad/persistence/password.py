@@ -1,5 +1,5 @@
 from passlib.apps import custom_app_context as pwd_context
-from db import db
+from crashatmypad import db
 
 
 class Password(db.Model):

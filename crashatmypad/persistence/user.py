@@ -1,6 +1,6 @@
 import uuid
 
-from db import db
+from crashatmypad import db
 
 
 class User(db.Model):
@@ -26,7 +26,7 @@ class User(db.Model):
         self.profession = profession
         self.phone = phone
         self.email_is_confirmed = False
-        self.confirmation_hash = uuid.uuid4()
+        self.confirmation_hash = str(uuid.uuid4())
 
     def __repr__(self):
         return '<User {} {} with email {}>'.format(self.name, self.last_name,

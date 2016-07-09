@@ -1,7 +1,7 @@
 import math
 from sqlalchemy.ext.hybrid import hybrid_method
 
-from db import db
+from crashatmypad import db
 
 
 class Location(db.Model):
