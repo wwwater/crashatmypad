@@ -14,17 +14,27 @@ class MainResource(Resource):
         Render the home page.
         :return: Flask response
         """
-        self.request_parser.add_argument('c',
+        self.request_parser.add_argument('confirmationSent',
                                          type=bool,
                                          required=False)
+        self.request_parser.add_argument('confirm',
+                                         type=str,
+                                         required=False)
+        self.request_parser.add_argument('user',
+                                         type=str,
+                                         required=False)
         args = self.request_parser.parse_args()
-        confirmation_email_sent = args['c'] or False
+        confirmation_email_sent = args['confirmationSent'] or False
+        confirmation_hash = args['confirm']
+        user = args['user']
         logger.info('The main page was requested. Confirmation-email-sent '
                     'message: %s', confirmation_email_sent)
         headers = {'Content-Type': 'text/html'}
         return make_response(
             render_template('landing_page.html',
-                            confirmation_email_sent=confirmation_email_sent),
+                            confirmation_email_sent=confirmation_email_sent,
+                            user=user,
+                            confirmation_hash=confirmation_hash),
             200,
             headers
         )

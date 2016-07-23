@@ -33,7 +33,7 @@ class UserResource(Resource):
             headers
         )
 
-    def put(self, user_id):
+    def post(self, user_id):
         """
         Updates user information.
         :param user_id
@@ -80,6 +80,8 @@ class UsersResource(Resource):
                                          type=str,
                                          required=True,
                                          help='No password is provided')
+        self.request_parser.add_argument('name', type=str, required=False)
+
         args = self.request_parser.parse_args()
         username = args['username']
         password = args['password']
@@ -90,9 +92,9 @@ class UsersResource(Resource):
 
         if user is not None:
             logger.warn('User %s already exists', user.email)
-            return make_response('User %s already exists', 400)
+            return make_response('User already exists', 400)
 
-        user = service.create_new_user(username, password)
+        user = service.create_new_user(username, password, args['name'])
         logger.info('New user %d with email %s has been created!', user.id,
                     user.email)
-        return redirect(url_for('main', c=True))
+        return redirect(url_for('main', confirmationSent=True))

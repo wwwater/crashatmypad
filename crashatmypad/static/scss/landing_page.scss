@@ -5,6 +5,55 @@
     background-image: url(../IMG_0272.JPG);
     background-size: cover;
 
+    .modal-dialog:target {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .modal-dialog {
+        position: fixed;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 999;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.5);
+        .dialog {
+            width: 400px;
+            position: relative;
+            margin: 10% auto;
+            padding: 16px;
+            border-radius: 10px;
+            background: #fff;
+            .close {
+                float: right;
+                text-decoration: none;
+            }
+            > form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 32px 0;
+                .name, .email, .password, .submit {
+                    display: flex;
+                    margin: 8px 0;
+                    width: 200px;
+                    border: none;
+                    background: #fafafa;
+                    border-radius: 5px;
+                    padding: 8px;
+                }
+                .submit {
+                    width: 160px;
+                    background: #ddd;
+                    margin-top: 16px;
+                }
+            }
+        }
+    }
+
     .header {
         display: flex;
         flex-direction: row;
@@ -27,50 +76,7 @@
             line-height: 48px;
             border-radius: 5px;
             text-decoration: none;
-        }
-        .login-dialog:target {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .login-dialog {
-            position: fixed;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 999;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.5);
-            .dialog {
-                width: 400px;
-                position: relative;
-                margin: 10% auto;
-                padding: 16px;
-                border-radius: 10px;
-                background: #fff;
-                .close {
-                    float: right;
-                    text-decoration: none;
-                }
-                > form {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    .email, .password, .submit {
-                        display: flex;
-                        margin: 4px;
-                        > label {
-                            width: 100px;
-                        }
-                    }
-                    .submit {
-                        background: #ddd;
-                        padding: 4px 8px;
-                        border-radius: 5px;
-                    }
-                }
-            }
+            border: none;
         }
     }
 

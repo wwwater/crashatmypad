@@ -15,7 +15,7 @@ class ApiMainTest(unittest.TestCase):
 
 class ApiUsersTest(unittest.TestCase):
 
-    def test_api_users_post(self):
+    def test_api_new_user_post(self):
         """
         Tests that a new user is created (with id 1)
         and it get be requested afterwards
@@ -25,6 +25,19 @@ class ApiUsersTest(unittest.TestCase):
             password='test'), follow_redirects=True)
         assert response.status_code == 200
         response = app.get('/user/1', follow_redirects=True)
+        assert response.status_code == 200
+
+    def test_api_new_user_with_name_post(self):
+        """
+        Tests that a new user is created (with id 1)
+        and it get be requested afterwards
+        """
+        response = app.post('/user', data=dict(
+            username='test2@test',
+            password='test',
+            name='My name'), follow_redirects=True)
+        assert response.status_code == 200
+        response = app.get('/user/2', follow_redirects=True)
         assert response.status_code == 200
 
     def test_api_users_post_failed(self):
@@ -53,7 +66,7 @@ class ApiUsersTest(unittest.TestCase):
         """
         Tests that no user with id 2 exists and the 400 is given back
         """
-        response = app.get('/user/2', follow_redirects=True)
+        response = app.get('/user/200', follow_redirects=True)
         assert response.status_code == 400
 
 

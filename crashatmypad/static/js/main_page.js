@@ -12,20 +12,12 @@ if (document.fonts) {
 
 global.onLogout = function () {
     qwest
-        .delete('/session', null, {
-            responseType: 'document',
-            headers: {
-                'Access-Control-Allow-Origin': 'http://127.0.0.1:8000/'
-            }
-        })
+        .delete('/session')
         .then(function (xhr, response) {
             console.log('Session deleted.', xhr, response);
-            // document.open();
-            // document.write(xhr.response);
-            // document.close();
-
+            document.location = '/';
         })
         .catch(function (e) {
-            console.log('Session delete failed', e);
+            console.warn('Session delete failed', e);
         });
 };

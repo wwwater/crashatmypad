@@ -25,22 +25,36 @@
           A confirmation link is sent to your email : )
         </div>
       {% endif %}
-      <a href="#to-login" class="button-login">
+      <a href="#login" class="button-login">
         Log in / Sign up
       </a>
-      <div id="to-login" class="login-dialog">
+      <div id="login" class="modal-dialog">
         <div class="dialog">
           <a href="#" title="Close" class="close">X</a>
-          <form action="/session" method="post">
-            <div class="email">
-              <label for="email">Email</label>
-              <input id="email" name="username" type="email"/>
-            </div>
-            <div class="password">
-              <label for="password">Password</label>
-              <input id="password" name="password" type="password" maxlength="32" />
-            </div>
-            <input type="submit" class="submit" value="Log in" />
+          <form action="/session" method="post" name="session">
+            <input class="email" name="username" type="email" maxlength="100"
+                   placeholder="Email"/>
+            <input class="password" name="password" type="password"
+                   maxlength="100" placeholder="Password"/>
+            <input type="submit" class="submit" value="Log in"/>
+          </form>
+          or
+          <a href="#sign-up" class="to-sign-up-button">
+            Sign up
+          </a>
+        </div>
+      </div>
+    <div id="sign-up" class="modal-dialog">
+        <div class="dialog">
+          <a href="#" title="Close" class="close">X</a>
+          <form action="/user" method="post" class="sign-up-form" name="user">
+            <input class="name" name="name" type="text" maxlength="100"
+                   placeholder="Your name"/>
+            <input class="email" name="username" type="email" maxlength="100"
+                   placeholder="Email"/>
+            <input class="password" name="password" type="password"
+                   maxlength="100" placeholder="Password"/>
+            <input type="submit" class="submit" value="Sign up"/>
           </form>
         </div>
       </div>
@@ -66,6 +80,15 @@
     <span class="description-text">A website by climbers for climbers, who are willing to share their roof,
       yard, trees, or
       driveway with fellow climbers passing through.</span>
+  </div>
+  <div id="confirm-email" class="modal-dialog">
+    <div class="dialog">
+      <a href="#" title="Close" class="close">X</a>
+      <form action={{'/user/'+user|string}} method="post">
+        <input name="confirm" type="hidden" value={{confirmation_hash}} />
+        <input type="submit" class="submit" value="Confirm email" />
+      </form>
+    </div>
   </div>
 </main>
 <script type="text/javascript" src="{{ url_for('static', filename='dist/main_page.js') }}"></script>

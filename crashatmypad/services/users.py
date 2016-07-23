@@ -26,7 +26,7 @@ def send_confirmation_email(user):
         'We\'re glad you registered on ' \
         '<span style="color:green">Crash at my Pad</span> : )<br/>' \
         'Please follow the ' \
-        '<a href="https://atmypad.com/user/{}?confirm={}">' \
+        '<a href="https://atmypad.com/?user={}&confirm={}#confirm-email">' \
         'link to confirm your email</a>.<br/><br/>' \
         'Have a nice day!<br/>' \
         'Your CrashAtMyPad team'.format(
@@ -48,7 +48,7 @@ def confirm_email(user, confirmation_hash):
         return True
     else:
         logger.warn('User %s tried to use wrong confirmation hash',
-                        user.email)
+                    user.email)
         return False
 
 
@@ -87,8 +87,8 @@ def get_user_data_to_display(user):
     return user_data_to_display, locations_to_display
 
 
-def create_new_user(username, password):
-    user = User(email=username)
+def create_new_user(username, password, name=None):
+    user = User(email=username, name=name)
     password_entry = Password(username=username, password=password)
     db.session.add(user)
     db.session.commit()

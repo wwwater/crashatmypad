@@ -1,4 +1,4 @@
-from flask import make_response, redirect, url_for
+from flask import make_response, redirect
 from flask_restful import Resource, reqparse
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -57,8 +57,7 @@ class SessionResource(Resource):
     def delete(self):
         logger.info('User %s logging out.', current_user.email)
         logout_user()
-        print current_user
-        return redirect('/', code=303)
+        return make_response('Logged out', 204)
 
 
 @login_manager.user_loader
