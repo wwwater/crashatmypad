@@ -6,7 +6,6 @@
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
   <link href='https://fonts.googleapis.com/css?family=Overlock:400,700|Cabin+Sketch:700' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/menus-dropdown-min.css">
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='dist/style.min.css') }}">
 </head>
 <body>
@@ -74,7 +73,8 @@
       <input type="text" id="input-location" title="Location to go"
               placeholder="Hamburg, Germany" class="search-input" autofocus
               oninput="onChangeSearchInput(event)"
-              onkeydown="onKeyDownSearchInput(event)"/>
+              onkeydown="onKeyDownSearchInput(event)"
+              onfocus="this.value = this.value;" />
     </div>
     <span class="description-text">A website by climbers for climbers, who are willing to share their roof,
       yard, trees, or

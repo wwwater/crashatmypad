@@ -32,16 +32,18 @@ function getOptionClassName(i) {
 }
 
 function goToSearchPage(fullName) {
-    console.log('on double click city', fullName);
     window.location.href = 'location?q=' + fullName;
 }
 
 function onKeyDownCitySelector(number, fullName, event) {
     if (event.keyCode === 38) { // arrow up
+        event.stopPropagation();
+        event.preventDefault();
         var selector = document.getElementById('selector-city');
         if (number === 0) {
             var input = document.getElementById('input-location');
             input.focus();
+
         } else {
             var prevOption = selector.children[number - 1];
             prevOption.className = 'option-city selected';
@@ -54,10 +56,20 @@ function onKeyDownCitySelector(number, fullName, event) {
         if (nextOption) {
             nextOption.className = 'option-city selected';
             nextOption.focus();
+            selector.children[number].className = getOptionClassName(number);
         }
-        selector.children[number].className = getOptionClassName(number);
     } else if (event.keyCode === 13) { // enter
         goToSearchPage(fullName);
+    } else if (event.keyCode >= 48 && event.keyCode <= 90) { // alfanum
+        var input = document.getElementById('input-location');
+        input.focus();
+        input.oninput({target: {value: input.value + event.key}});
+    } else if (event.keyCode === 8) { // backspace
+        var input = document.getElementById('input-location');
+        input.focus();
+        input.oninput({target: {
+            value: input.value.substring(0, input.value.length - 1)
+        }});
     }
 }
 
