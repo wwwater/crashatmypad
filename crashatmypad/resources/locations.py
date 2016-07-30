@@ -22,7 +22,7 @@ class LocationsResource(Resource):
         query = args['q'] or 'Hamburg, Germany'
         logger.info('Search for a location with query %s', query)
         results = find_locations_by_query(query)
-        logger.info('Found %d locations', len(results))
+        logger.info('Found %d locations', len(results['locations']))
         headers = {'Content-Type': 'text/html'}
         return make_response(
             render_template('search.html',

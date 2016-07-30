@@ -15,6 +15,7 @@ login_manager = LoginManager()
 mail = Mail()
 db = SQLAlchemy()
 logger = app.logger
+config = app.config
 
 
 def create_app(environment):

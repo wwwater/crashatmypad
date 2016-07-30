@@ -98,5 +98,14 @@ def create_new_user(username, password, name=None):
     return user
 
 
+def delete_user(username):
+    password = find_user_password_by_email(username)
+    user = find_user_by_email(username)
+    db.session.delete(password)
+    db.session.commit()
+    db.session.delete(user)
+    db.session.commit()
+
+
 def _get_first_name_from_email(email):
     return email.split('@')[0].split('.')[0]

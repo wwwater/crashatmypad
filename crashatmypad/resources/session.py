@@ -31,7 +31,7 @@ class SessionResource(Resource):
         user = users_service.find_user_by_email(username)
 
         if user is None:
-            return make_response('User ' + username + ' does not exist!', 400)
+            return make_response('User ' + username + ' does not exist!', 404)
         else:
             logger.info('Logging in with an existing username: %s',
                         user.email)
@@ -40,7 +40,7 @@ class SessionResource(Resource):
             if not existing_password_entry.verify_password(password):
                 logger.warn('User %s tried to login with a wrong password',
                             user.email)
-                return make_response('Wrong password', 403)
+                return make_response('Wrong password', 404)
             elif not user.email_is_confirmed:
                 logger.warn('User %s has not verified their email yet.'
                             ' Login attempt denied.',

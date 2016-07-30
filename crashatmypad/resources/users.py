@@ -21,7 +21,7 @@ class UserResource(Resource):
         user = service.get_user_by_id(user_id)
         if not user:
             return make_response('User with id ' + str(user_id) +
-                                 ' does not exist.', 400)
+                                 ' does not exist.', 404)
 
         user_data, user_locations = service.get_user_data_to_display(user)
 
@@ -46,7 +46,7 @@ class UserResource(Resource):
         user = service.get_user_by_id(user_id)
         if not user:
             return make_response('User with id ' + str(user_id) +
-                                 ' does not exist.', 400)
+                                 ' does not exist.', 404)
 
         confirm_hash = args['confirm']
         if confirm_hash:
@@ -63,7 +63,35 @@ class UserResource(Resource):
                 return make_response('The confirmation email link is wrong! '
                                      'The email cannot be confirmed.', 400)
 
-        return make_response('No request parameters specified!', 404)
+        return make_response('No request parameters specified!', 400)
+
+    def delete(self, user_id):
+        self.request_parser.add_argument('password',
+                                         type=str,
+                                         required=True,
+                                         help='No password is provided')
+        args = self.request_parser.parse_args()
+        password = args['password']
+
+        if not password:
+            return make_response('Password is mandatory!', 400)
+
+        user = service.get_user_by_id(user_id)
+
+        if user is None:
+            return make_response('User ' + str(user_id) + ' does not exist!',
+                                 404)
+        else:
+            existing_password_entry = \
+                service.find_user_password_by_email(user.email)
+            if not existing_password_entry.verify_password(password):
+                logger.warn('Cannot delete user %s (%s): '
+                            'wrong password provided',
+                            user_id, user.email)
+                return make_response('Wrong password', 400)
+            service.delete_user(user.email)
+            logger.info('Deleted user %s (%s)', user_id, user.email)
+            return redirect('/')
 
 
 class UsersResource(Resource):
