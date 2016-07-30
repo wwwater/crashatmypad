@@ -18,10 +18,8 @@
 <body onload="getMapWithMarkers({{ query_coordinates }}, {{ results }})">
   <div class="search-page">
     <div class="search">
-      <select name="location" id="selector-city" class="selector-city"
-          onkeydown="onKeyDownCitySelector(event)"
-          ondblclick="onDoubleClickCitySelector(event)"
-          onclick="onDoubleClickCitySelector(event)"></select>
+      <div id="selector-city" class="selector-city">
+      </div>
       <input type="text" id="input-location" title="Location to go"
               placeholder="{{ query }}" class="search-input" autofocus
               oninput="onChangeSearchInput(event)"

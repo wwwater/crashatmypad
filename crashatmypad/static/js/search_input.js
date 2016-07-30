@@ -1,19 +1,11 @@
 'use strict';
 
 var _ = require('lodash');
-console.log(_.map([1, 2, 3], function (n) { return n + ' meow'; }));
 
 var searchInput = document.getElementById('input-location');
 if (searchInput) {
     searchInput.setAttribute('autocomplete', 'off');
 }
-
-var selector = document.getElementById('selector-city');
-if (selector) {
-    selector.size = 0;
-    selector.style.height = 0;
-}
-
 
 function sendRequest(type, url) {
     return new Promise(function (resolve, reject) {
@@ -35,13 +27,47 @@ function sendRequest(type, url) {
     });
 }
 
+function getOptionClassName(i) {
+    return 'option-city' + (i % 2 === 0 ? ' another' : '');
+}
+
+function goToSearchPage(fullName) {
+    console.log('on double click city', fullName);
+    window.location.href = 'location?q=' + fullName;
+}
+
+function onKeyDownCitySelector(number, fullName, event) {
+    if (event.keyCode === 38) { // arrow up
+        var selector = document.getElementById('selector-city');
+        if (number === 0) {
+            var input = document.getElementById('input-location');
+            input.focus();
+        } else {
+            var prevOption = selector.children[number - 1];
+            prevOption.className = 'option-city selected';
+            prevOption.focus();
+        }
+        selector.children[number].className = getOptionClassName(number);
+    } else if (event.keyCode === 40) { // arrow down
+        var selector = document.getElementById('selector-city');
+        var nextOption = selector.children[number + 1];
+        if (nextOption) {
+            nextOption.className = 'option-city selected';
+            nextOption.focus();
+        }
+        selector.children[number].className = getOptionClassName(number);
+    } else if (event.keyCode === 13) { // enter
+        goToSearchPage(fullName);
+    }
+}
+
 global.onChangeSearchInput = function (event) {
     var query = event.target.value;
     console.log('on search input change', query);
-    if (query.length > 0) {
+    if (query.length > 2) {
         sendRequest('GET', 'city?q=' + query)
         .then(function (data) {
-            selector = document.getElementById('selector-city');
+            var selector = document.getElementById('selector-city');
 
             while (selector.firstChild) {
                 selector.removeChild(selector.firstChild);
@@ -50,62 +76,43 @@ global.onChangeSearchInput = function (event) {
             var cities = JSON.parse(data).cities;
             console.log('Got cities', cities);
             var nOptions = Math.min(cities.length, 10);
-            if (nOptions > 0) {
-                // when only 1 option set the size to 2 to avoid collapsing
-                selector.size = Math.max(nOptions, 2);
-                for (var i = 0; i < nOptions; i++) {
-                    var option = document.createElement('option');
-                    option.value = cities[i].city + ',' + cities[i].state +
-                        ',' + cities[i].country;
-                    option.text = cities[i].city + ' (' + cities[i].state +
-                        '), ' + cities[i].country;
-                    option.className = 'option-city';
-                    selector.appendChild(option);
-                    console.log('Append option with', option.value);
-                }
+            for (var i = 0; i < nOptions; i++) {
+                var option = document.createElement('div');
+                var fullName = _.join(
+                    [cities[i].city, cities[i].state, cities[i].country], ',');
+                option.innerText = cities[i].city + ' (' + cities[i].state +
+                    '), ' + cities[i].country;
+                option.className = getOptionClassName(i);
+                option.tabIndex = '-1';
+                option.addEventListener('click',
+                    goToSearchPage.bind(null, fullName), false);
+                option.addEventListener('keydown',
+                    onKeyDownCitySelector.bind(null, i, fullName), true);
+                selector.appendChild(option);
             }
-            selector.style.height = (nOptions * 29) + 'px';
         })
         .catch(function (data) {
             console.log('Failed getting cities', data);
         });
     } else {
-        selector = document.getElementById('selector-city');
+        var selector = document.getElementById('selector-city');
         if (selector) {
-            selector.size = 0;
-            selector.style.height = 0;
+            while (selector.firstChild) {
+                selector.removeChild(selector.firstChild);
+            }
         }
     }
 };
 
 global.onKeyDownSearchInput = function (event) {
     if (event.keyCode === 40) { // arrow down
-        selector = document.getElementById('selector-city');
+        var selector = document.getElementById('selector-city');
         if (selector.firstChild) {
-            selector.options[0].selected = true;
-            selector.focus();
+            selector.firstChild.className = 'option-city selected';
+            selector.firstChild.focus();
         }
     }
-
 };
 
-global.onKeyDownCitySelector = function (event) {
-    if (event.keyCode === 38) { // arrow up
-        selector = document.getElementById('selector-city');
-        if (selector.selectedIndex === 0) {
-            var input = document.getElementById('input-location');
-            input.focus();
-        }
-    } else if (event.keyCode === 13) { // enter
-        selector = document.getElementById('selector-city');
-        var query = selector.options[selector.selectedIndex].value;
-        window.location.href = 'location?q=' + query;
-    }
-};
 
-global.onDoubleClickCitySelector = function () {
-    selector = document.getElementById('selector-city');
-    var query = selector.options[selector.selectedIndex].value;
-    console.log('on double click city', query);
-    window.location.href = 'location?q=' + query;
-};
+

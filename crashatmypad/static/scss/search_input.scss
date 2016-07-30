@@ -17,6 +17,7 @@
 
     .selector-city {
         position: absolute;
+        color: black;
         top: calc(23px + 8px + 2px);
         width: calc(65% + 8px);
         border-radius: 3px;
@@ -24,9 +25,18 @@
         z-index: 10000;
 
         .option-city {
+            background: white;
             font-size: 16px;
             height: 20px;
-            padding-top: 8px;
+            padding: 4px 8px;
+            text-align: left;
+            cursor: pointer;
+            &.another {
+                background: #eee;
+            }
+            &.selected {
+                background: #aaa;
+            }
         }
     }
 }

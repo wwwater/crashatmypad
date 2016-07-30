@@ -55,5 +55,4 @@ class CitiesResource(Resource):
             }
 
         results = map(world_city_to_display_format, cities.get(query))
-        logger.info(results)
         return jsonify(cities=results)
