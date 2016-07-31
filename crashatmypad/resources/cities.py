@@ -31,7 +31,7 @@ class CitiesResource(Resource):
     def __init__(self):
         self.request_parser = reqparse.RequestParser()
         self.request_parser.add_argument(
-            'q', type=str, required=True,
+            'q', type=unicode, required=True,
             help='No search query for city provided')
         super(CitiesResource, self).__init__()
 
@@ -43,7 +43,7 @@ class CitiesResource(Resource):
 
         args = self.request_parser.parse_args()
 
-        query = str(string.replace(args['q'], ', ', ','))
+        query = str(string.replace(args['q'].encode('utf-8'), ', ', ','))
         logger.info('Search a world city with query %s', query)
 
         def world_city_to_display_format(entry):

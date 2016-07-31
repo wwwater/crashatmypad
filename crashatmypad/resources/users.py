@@ -108,7 +108,7 @@ class UsersResource(Resource):
                                          type=str,
                                          required=True,
                                          help='No password is provided')
-        self.request_parser.add_argument('name', type=str, required=False)
+        self.request_parser.add_argument('name', type=unicode, required=False)
 
         args = self.request_parser.parse_args()
         username = args['username']
@@ -122,7 +122,8 @@ class UsersResource(Resource):
             logger.warn('User %s already exists', user.email)
             return make_response('User already exists', 400)
 
-        user = service.create_new_user(username, password, args['name'])
+        user = service.create_new_user(username, password,
+                                       args['name'].encode('utf-8'))
         logger.info('New user %d with email %s has been created!', user.id,
                     user.email)
         return redirect(url_for('main', confirmationSent=True))

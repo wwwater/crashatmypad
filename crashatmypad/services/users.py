@@ -30,7 +30,8 @@ def send_confirmation_email(user):
         'link to confirm your email</a>.<br/><br/>' \
         'Have a nice day!<br/>' \
         'Your CrashAtMyPad team'.format(
-            (user.name or _get_first_name_from_email(user.email)),
+            (user.name.encode('utf-8') or
+             _get_first_name_from_email(user.email)),
             user.id,
             user.confirmation_hash)
     message = Message("Please confirm your email on Crash At My Pad",
