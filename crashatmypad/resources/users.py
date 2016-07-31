@@ -122,8 +122,9 @@ class UsersResource(Resource):
             logger.warn('User %s already exists', user.email)
             return make_response('User already exists', 400)
 
-        user = service.create_new_user(username, password,
-                                       args['name'].encode('utf-8'))
+        name = args['name'].encode('utf-8') if args['name'] else ''
+
+        user = service.create_new_user(username, password, name)
         logger.info('New user %d with email %s has been created!', user.id,
                     user.email)
         return redirect(url_for('main', confirmationSent=True))
