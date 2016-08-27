@@ -31,7 +31,7 @@ class MainResource(Resource):
                     'message: %s', confirmation_email_sent)
         headers = {'Content-Type': 'text/html'}
         return make_response(
-            render_template('landing_page.html',
+            render_template('start_page.html',
                             confirmation_email_sent=confirmation_email_sent,
                             user=user,
                             confirmation_hash=confirmation_hash),

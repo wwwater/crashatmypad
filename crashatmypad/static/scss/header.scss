@@ -1,0 +1,76 @@
+.modal-dialog:target {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-dialog {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    .dialog {
+        width: 400px;
+        position: relative;
+        margin: 10% auto;
+        padding: 16px;
+        border-radius: 10px;
+        background: #fff;
+        text-align: center;
+        .close {
+            float: right;
+            text-decoration: none;
+        }
+        > form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 32px 0;
+            .name, .email, .password, .submit {
+                display: flex;
+                margin: 8px 0;
+                width: 200px;
+                border: none;
+                background: #fafafa;
+                border-radius: 5px;
+                padding: 8px;
+            }
+            .submit {
+                width: 160px;
+                background: #ddd;
+                margin-top: 16px;
+            }
+        }
+    }
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    height: 50px;
+    .greeting {
+        height: 48px;
+        line-height: 48px;
+        font-size: 16px;
+        font-weight: bold;
+        margin-right: 32px;
+    }
+    .button-login {
+        background: rgba(0, 0, 0, 0.2);
+        color: black;
+        font-size: 16px;
+        font-weight: bold;
+        width: 160px;
+        height: 48px;
+        line-height: 48px;
+        border-radius: 5px;
+        text-decoration: none;
+        text-align: center;
+        border: none;
+    }
+}

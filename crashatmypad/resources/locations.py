@@ -26,7 +26,7 @@ class LocationsResource(Resource):
         logger.info('Found %d locations', len(results['locations']))
         headers = {'Content-Type': 'text/html'}
         return make_response(
-            render_template('search.html',
+            render_template('search_page.html',
                             query=query.decode('utf-8'),
                             results=results['locations'],
                             query_coordinates=results['query']),

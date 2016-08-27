@@ -1,4 +1,6 @@
-div {
+.container-user-page {
+    background: #eee;
+    min-height: 100vh;
 }
 
 .user-data-field {
@@ -23,6 +25,7 @@ div {
             border: 1px solid #ddd;
             border-radius: 3px;
             margin: 4px;
+            background: #fafafa;
         }
     }
 

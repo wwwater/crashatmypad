@@ -21,6 +21,9 @@ class SessionResource(Resource):
                                          type=str,
                                          required=True,
                                          help='No password is provided')
+        self.request_parser.add_argument('source',
+                                         type=str,
+                                         required=False)
         args = self.request_parser.parse_args()
         username = args['username']
         password = args['password']
@@ -51,7 +54,10 @@ class SessionResource(Resource):
             else:
                 login_user(user)
                 logger.info('User %s logged in', user.email)
-                return redirect('/')
+                if args['source']:
+                    return redirect(args['source'])
+                else:
+                    return redirect('/')
 
     @login_required
     def delete(self):
@@ -62,4 +68,5 @@ class SessionResource(Resource):
 
 @login_manager.user_loader
 def load_user(username):
+    logger.info('Loading user %s', username)
     return users_service.find_user_by_email(username)

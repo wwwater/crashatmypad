@@ -5,18 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
+  <link href='https://fonts.googleapis.com/css?family=Overlock:400,700|Cabin+Sketch:700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
-  <!--[if lte IE 8]>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
-  <![endif]-->
-  <!--[if gt IE 8]><!-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
-  <!--<![endif]-->
   <link rel=stylesheet type=text/css href="{{ url_for('static', filename='dist/style.min.css') }}">
 </head>
 <body>
 
 <main class="container-user-page">
+  <div class="header">
+    {% if current_user.is_authenticated %}
+      <div class="greeting">
+      Hi {{ current_user.name or current_user.email }}!
+      </div>
+      <button class="button-login" onclick="onLogout()">
+        Log out
+      </button>
+    {% else %}
+      {% if confirmation_email_sent %}
+        <div class="greeting">
+          A confirmation link is sent to your email : )
+        </div>
+      {% endif %}
+      <a href="#login" class="button-login">
+        Log in / Sign up
+      </a>
+      <div id="login" class="modal-dialog">
+        <div class="dialog">
+          <a href="#" title="Close" class="close">X</a>
+          <form action="/session" method="post" name="session">
+            <input class="email" name="username" type="email" maxlength="100"
+                   placeholder="Email"/>
+            <input class="password" name="password" type="password"
+                   maxlength="100" placeholder="Password"/>
+            <input name="source" type="hidden" value={{"/user/"+user.id}} />
+            <input type="submit" class="submit" value="Log in"/>
+          </form>
+          or
+          <a href="#sign-up" class="to-sign-up-button">
+            Sign up
+          </a>
+        </div>
+      </div>
+    <div id="sign-up" class="modal-dialog">
+        <div class="dialog">
+          <a href="#" title="Close" class="close">X</a>
+          <form action="/user" method="post" class="sign-up-form" name="user">
+            <input class="name" name="name" type="text" maxlength="100"
+                   placeholder="Your name"/>
+            <input class="email" name="username" type="email" maxlength="100"
+                   placeholder="Email"/>
+            <input class="password" name="password" type="password"
+                   maxlength="100" placeholder="Password"/>
+            <input name="source" type="hidden" value="user_page" />
+            <input type="submit" class="submit" value="Sign up"/>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+  </div>
   <div class="pure-g">
     <div class="pure-u-1 pure-u-md-1-3">
       <div class="user-data-field">
@@ -70,6 +117,6 @@
     </div>
   </div>
 </main>
-
+<script type="text/javascript" src="{{ url_for('static', filename='dist/header.js') }}"></script>
 </body>
 </html>

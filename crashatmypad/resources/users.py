@@ -42,6 +42,9 @@ class UserResource(Resource):
         self.request_parser.add_argument('confirm',
                                          type=str,
                                          required=False)
+        self.request_parser.add_argument('source',
+                                         type=str,
+                                         required=False)
         args = self.request_parser.parse_args()
         user = service.get_user_by_id(user_id)
         if not user:
@@ -54,7 +57,10 @@ class UserResource(Resource):
                 logger.info('User %s confirmed their email %s', user.id,
                             user.email)
                 login_user(user)
-                return redirect('/')
+                if args['source']:
+                    return redirect(args['source'])
+                else:
+                    return redirect('/')
             else:
                 logger.warn('User with email %s tried to confirm their '
                             'email with wrong hash (expected %s - got %s)',

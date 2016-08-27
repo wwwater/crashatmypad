@@ -63,6 +63,7 @@ def get_user_data_to_display(user):
     else:
         age = 21
     user_data_to_display = {
+        'id': str(user.id),
         'name': user.name,
         'last_name': user.last_name,
         'age': age,
