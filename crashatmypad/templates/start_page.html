@@ -14,7 +14,11 @@
   <div class="header">
     {% if current_user.is_authenticated %}
       <div class="greeting">
-      Hi {{ current_user.name or current_user.email }}!
+        Hi
+        <a href="{{ '/user/' + current_user.id|string() }}">
+          {{ current_user.name or current_user.email }}
+        </a>
+        !
       </div>
       <button class="button-login" onclick="onLogout()">
         Log out
