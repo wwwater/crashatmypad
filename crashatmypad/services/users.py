@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from flask_mail import Message
 
@@ -63,11 +63,12 @@ def get_user_data_to_display(user):
     else:
         age = 21
     user_data_to_display = {
-        'id': str(user.id),
-        'name': user.name,
-        'last_name': user.last_name,
+        'id': user.id,
+        'name': user.name or '',
+        'last_name': user.last_name or '',
         'age': age,
-        'profession': user.profession
+        'profession': user.profession or '',
+        'birthday': user.birthday or date(1987, 9, 28)
     }
 
     locations = user.locations
@@ -107,6 +108,25 @@ def delete_user(username):
     db.session.commit()
     db.session.delete(user)
     db.session.commit()
+
+
+def update_user(args, user):
+    user_updated = False
+    for field in ['name', 'last_name', 'profession', 'birthday']:
+        if args[field]:
+            if field == 'birthday':
+                new_value = \
+                    datetime.strptime(args[field], '%Y-%m-%d').date()
+            else:
+                new_value = args[field].encode('utf-8')
+            if hasattr(user, field):
+                # FIXME: is this ok or not so?
+                user.__setattr__(field, new_value)
+                db.session.commit()
+                logger.info('User %s has been updated. %s has been changed',
+                            user.email, field)
+                user_updated = True
+    return user_updated
 
 
 def _get_first_name_from_email(email):

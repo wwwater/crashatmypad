@@ -27,7 +27,7 @@ class GeoCodingTest(unittest.TestCase):
                                street='Barmbekerstr.')
         assert data is not None
         assert float('{0:.1f}'.format(float(data['longitude']))) == 10.0
-        assert float('{0:.2f}'.format(float(data['latitude']))) == 53.59
+        assert float('{0:.1f}'.format(float(data['latitude']))) == 53.6
 
 
 if __name__ == "__main__":

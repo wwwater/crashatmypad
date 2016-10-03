@@ -73,6 +73,21 @@ class ApiUsersTest(unittest.TestCase):
             follow_redirects=True).status_code == 400
         delete_test_user(app)
 
+    def test_api_user_update(self):
+        """
+        Tests that the users' data is updated
+        """
+        create_test_user(app)
+        assert app.post(
+            '/user/1',
+            data=dict(name='Marcus',
+                      last_name='Aurelius',
+                      profession='Emperor',
+                      birthday='0121-04-26')).status_code == 201
+        # TODO test that the user has really been updated,
+        # when a json-response exists
+        delete_test_user(app)
+
     def test_api_user_post_fails_when_no_args(self):
         """
         Tests that user-post request fails when none of possible args is given

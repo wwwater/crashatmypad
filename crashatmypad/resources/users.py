@@ -45,6 +45,18 @@ class UserResource(Resource):
         self.request_parser.add_argument('source',
                                          type=str,
                                          required=False)
+        self.request_parser.add_argument('name',
+                                         type=unicode,
+                                         required=False)
+        self.request_parser.add_argument('last_name',
+                                         type=unicode,
+                                         required=False)
+        self.request_parser.add_argument('profession',
+                                         type=unicode,
+                                         required=False)
+        self.request_parser.add_argument('birthday',
+                                         type=str,
+                                         required=False)
         args = self.request_parser.parse_args()
         user = service.get_user_by_id(user_id)
         if not user:
@@ -69,7 +81,12 @@ class UserResource(Resource):
                 return make_response('The confirmation email link is wrong! '
                                      'The email cannot be confirmed.', 400)
 
-        return make_response('No request parameters specified!', 400)
+        user_updated = service.update_user(args, user)
+
+        if user_updated:
+            return make_response('User has been updated', 201)
+        else:
+            return make_response('No request parameters specified!', 400)
 
     def delete(self, user_id):
         self.request_parser.add_argument('password',

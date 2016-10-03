@@ -38,7 +38,7 @@
                    placeholder="Email"/>
             <input class="password" name="password" type="password"
                    maxlength="100" placeholder="Password"/>
-            <input name="source" type="hidden" value={{"/user/"+user.id}} />
+            <input name="source" type="hidden" value={{"/user/"+user.id|string()}} />
             <input type="submit" class="submit" value="Log in"/>
           </form>
           or
@@ -70,10 +70,30 @@
         <img alt={{user.name}} src="{{ url_for('static', filename='userpic1.jpg') }}"/>
       </div>
       <div class="user-data-field">
-        {{ user.name }} {{ user.last_name }}
+        {% if current_user.id == user.id %}
+          <input class="user-name" value="{{user.name}}"
+                 oninput="onUserChange(event, {{user.id}}, 'name')" />
+          <input class="user-last-name" value="{{user.last_name}}"
+                 oninput="onUserChange(event, {{user.id}}, 'last_name')" />
+          <span class="hint-left">First name</span>
+          <span class="hint-right">Last name</span>
+        {% else %}
+          <span>{{user.name}}</span>
+          <span>{{user.last_name}}</span>
+        {% endif %}
       </div>
       <div class="user-data-field">
-        {{ user.profession }}, {{ user.age }}
+        {% if current_user.id == user.id %}
+          <input class="user-profession" value="{{user.profession}}"
+                 oninput="onUserChange(event, {{user.id}}, 'profession')" />
+          <input class="user-age" value="{{user.birthday}}"
+                 oninput="onUserChange(event, {{user.id}}, 'birthday')" />
+          <span class="hint-left">Profession</span>
+          <span class="hint-right">Birthday y-m-d</span>
+        {% else %}
+          <span>{{user.profession}}</span>
+          <span>{{user.age}}</span>
+        {% endif %}
       </div>
       <div class="user-data-field">
       </div>
@@ -118,5 +138,6 @@
   </div>
 </main>
 <script type="text/javascript" src="{{ url_for('static', filename='dist/header.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='dist/user_page.js') }}"></script>
 </body>
 </html>

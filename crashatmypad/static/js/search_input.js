@@ -1,30 +1,11 @@
 'use strict';
 
 var _ = require('lodash');
+var requests = require('./requests');
 
 var searchInput = document.getElementById('input-location');
 if (searchInput) {
     searchInput.setAttribute('autocomplete', 'off');
-}
-
-function sendRequest(type, url) {
-    return new Promise(function (resolve, reject) {
-        var request = new XMLHttpRequest();
-        request.open(type, url);
-        request.send();
-        request.onload = function () {
-            if (this.status >= 200 && this.status < 300) {
-                // Performs the function 'resolve' when this.status is equal to 2xx
-                resolve(this.response);
-            } else {
-                // Performs the function 'reject' when this.status is different than 2xx
-                reject(this.statusText);
-            }
-        };
-        request.onerror = function () {
-            reject(this.statusText);
-        };
-    });
 }
 
 function getOptionClassName(i) {
@@ -77,7 +58,7 @@ global.onChangeSearchInput = function (event) {
     var query = event.target.value;
     console.log('on search input change', query);
     if (query.length > 2) {
-        sendRequest('GET', 'city?q=' + query)
+        requests.sendRequest('GET', 'city?q=' + query)
         .then(function (data) {
             var selector = document.getElementById('selector-city');
 
