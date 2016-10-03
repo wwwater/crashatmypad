@@ -5,7 +5,7 @@ var requests = require('./requests');
 
 function changeUser(event, userId, fieldName) {
     var value = event.target.value;
-    console.log('new', fieldName, value);
+    console.log('New', fieldName, value);
     if (userId && fieldName && value) {
         requests.sendRequest('POST', '/user/' + userId +
                 '?' + fieldName + '=' + value)
@@ -13,7 +13,7 @@ function changeUser(event, userId, fieldName) {
                 console.log('User updated.');
             })
             .catch(function (err) {
-                console.warn('User failed', err);
+                console.warn('User update failed', err);
             });
     } else {
         console.warn('Cannot update user. Need user id, the field name ' +
@@ -21,4 +21,4 @@ function changeUser(event, userId, fieldName) {
     }
 }
 
-global.onUserChange = _.debounce(changeUser, 500);
+global.onUserChange = _.debounce(changeUser, 1000);

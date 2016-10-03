@@ -113,13 +113,18 @@ def delete_user(username):
 def update_user(args, user):
     user_updated = False
     for field in ['name', 'last_name', 'profession', 'birthday']:
-        if args[field]:
+        if field in args and args[field]:
             if field == 'birthday':
-                new_value = \
-                    datetime.strptime(args[field], '%Y-%m-%d').date()
+                new_value = None
+                try:
+                    new_value = \
+                        datetime.strptime(args[field], '%Y-%m-%d').date()
+                except ValueError:
+                    logger.warn('Value %s cannot be converted to date',
+                                args[field])
             else:
                 new_value = args[field].encode('utf-8')
-            if hasattr(user, field):
+            if hasattr(user, field) and new_value is not None:
                 # FIXME: is this ok or not so?
                 user.__setattr__(field, new_value)
                 db.session.commit()
